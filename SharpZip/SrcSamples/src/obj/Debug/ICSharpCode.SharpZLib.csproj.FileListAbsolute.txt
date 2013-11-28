@@ -1,0 +1,6 @@
+C:\Users\Sicarul\Dropbox\Dev\TarMaker\SrcSamples\bin\ICSharpCode.SharpZipLib.xml
+C:\Users\Sicarul\Dropbox\Dev\TarMaker\SrcSamples\bin\ICSharpCode.SharpZipLib.dll
+C:\Users\Sicarul\Dropbox\Dev\TarMaker\SrcSamples\bin\ICSharpCode.SharpZipLib.pdb
+C:\Users\Sicarul\Dropbox\Dev\TarMaker\SrcSamples\src\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Sicarul\Dropbox\Dev\TarMaker\SrcSamples\src\obj\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Sicarul\Dropbox\Dev\TarMaker\SrcSamples\src\obj\Debug\ICSharpCode.SharpZipLib.pdb

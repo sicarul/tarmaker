@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:basic="http://serena.com/dimensions/basic/1" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:requests="http://serena.com/dimensions/requests/1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://serena.com/dimensions/requests/1" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="dmwebservices_basic.xml" namespace="http://serena.com/dimensions/basic/1" />
+  <xsd:complexType name="NewRequest">
+    <xsd:annotation>
+      <xsd:documentation>
+				This object represents a Dimensions Change Request to be created in the repository. 
+				Use this objects when creating a new Dimensions Change Request.
+			</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="type" type="xsd:string" />
+      <xsd:element name="productId" type="xsd:string" />
+      <xsd:element name="title" type="xsd:string" />
+      <xsd:element name="detailedDescription" type="xsd:string" />
+      <xsd:element minOccurs="0" name="attributes" type="basic:AttributeArray" />
+      <xsd:element minOccurs="0" name="relatedParts" type="basic:RequestRelatedPartArray" />
+      <xsd:element minOccurs="0" name="relatedItems" type="basic:RequestRelatedItemArray" />
+      <xsd:element minOccurs="0" name="relatedRequests" type="basic:RequestRelatedRequestArray" />
+      <xsd:element minOccurs="0" name="relatedBaselines" type="basic:RequestRelatedBaselineArray" />
+      <xsd:element minOccurs="0" name="relatedRequirements" type="basic:RequestRelatedRequirementArray" />
+      <xsd:element minOccurs="0" name="relatedProjectSpec" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Request">
+    <xsd:annotation>
+      <xsd:documentation>
+				This object represents a Dimensions Change Request already in the repository. 
+				Use this object to reference an existing Dimensions Change Request.
+			</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="requestId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="status" type="xsd:string" />
+      <xsd:element minOccurs="0" name="attributes" type="basic:AttributeArray" />
+      <xsd:element minOccurs="0" name="relatedParts" type="basic:RequestRelatedPartArray" />
+      <xsd:element minOccurs="0" name="relatedItems" type="basic:RequestRelatedItemArray" />
+      <xsd:element minOccurs="0" name="relatedRequests" type="basic:RequestRelatedRequestArray" />
+      <xsd:element minOccurs="0" name="relatedBaselines" type="basic:RequestRelatedBaselineArray" />
+      <xsd:element minOccurs="0" name="relatedRequirements" type="basic:RequestRelatedRequirementArray" />
+      <xsd:element minOccurs="0" name="relatedProjectSpec" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pendingUsers" type="basic:PendingUserArray" />
+      <xsd:element minOccurs="0" name="archive" type="xsd:boolean" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

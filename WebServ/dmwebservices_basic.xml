@@ -1,0 +1,1174 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://serena.com/dimensions/basic/1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://serena.com/dimensions/basic/1">
+<complexType name="ConnectionDetails">
+<annotation>
+<documentation>
+				Specifies the connection details for the Dimensions server.
+			</documentation>
+</annotation>
+<sequence>
+<element minOccurs="0" name="username" type="xsd:string"/>
+<element minOccurs="0" name="password" type="xsd:string"/>
+<element minOccurs="0" name="dbName" type="xsd:string"/>
+<element minOccurs="0" name="dbConnection" type="xsd:string"/>
+<element minOccurs="0" name="server" type="xsd:string"/>
+</sequence>
+</complexType>
+<simpleType name="AttributeDatatype">
+<annotation>
+<documentation>
+				The data type determines what kind of information the
+				user can enter as the attribute value. The valid data
+				types are Character (one or more lines of text), Date
+				The date in format DD-MMM-YYYY) and Number (a real
+				number or integer).
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Char"/>
+<enumeration value="Number"/>
+<enumeration value="Integer"/>
+<enumeration value="Date"/>
+</restriction>
+</simpleType>
+<simpleType name="AttributeType">
+<annotation>
+<documentation>
+				The type of attribute determines if the user can enter a
+				single attribute value, a row of values, or a table of values.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Single_Value"/>
+<enumeration value="Multi_Value"/>
+</restriction>
+</simpleType>
+<complexType name="StringArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="value" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="IntArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="value" type="xsd:int"/>
+</sequence>
+</complexType>
+<complexType name="Attribute">
+<annotation>
+<documentation>
+				This is the Attribute object.
+			</documentation>
+</annotation>
+<sequence>
+<element name="name" type="xsd:string">
+<annotation>
+<documentation>
+						This field is the name of the system or user defined attribute.
+					</documentation>
+</annotation>
+</element>
+<element name="datatype" type="impl:AttributeDatatype">
+<annotation>
+<documentation>
+						This field is the data type of the Attribute.
+						An Attribute may be one of the following data types:
+						Integer, Number, Char, Date.
+					</documentation>
+</annotation>
+</element>
+<element name="type" type="impl:AttributeType">
+<annotation>
+<documentation>
+						This field indicates if the attribute is a
+						single-value or a multi-value attribute.
+					</documentation>
+</annotation>
+</element>
+<choice>
+<element name="value" type="xsd:string">
+<annotation>
+<documentation>
+							This field represents the single-value value of the attribute.
+							This field should not be used if the attribute is defined as multi-value.
+						</documentation>
+</annotation>
+</element>
+<element name="multivalue" type="impl:StringArray">
+<annotation>
+<documentation>
+							This field represents the multi-value value of the attribute.
+							This field should not be used if the attribute is defined as single-value.
+						</documentation>
+</annotation>
+</element>
+</choice>
+</sequence>
+</complexType>
+<complexType name="AttributeArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="attribute" type="impl:Attribute"/>
+</sequence>
+</complexType>
+<complexType name="Attachment">
+<sequence>
+<element name="name" type="xsd:string"/>
+<element name="filename" type="xsd:string"/>
+<element name="description" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="AttachmentArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="attachment" type="impl:Attachment"/>
+</sequence>
+</complexType>
+<complexType name="UserNameArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="userName" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="ItemSpecArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="itemSpec" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="ItemTypeArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="itemType" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="PartSpecArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="partSpec" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="FileNameArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="fileName" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="RequestIdArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="requestId" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="RequestTypeArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="requestType" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="RequirementSpecArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="requirementSpec" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="BaselineSpecArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="baselineSpec" type="xsd:string"/>
+</sequence>
+</complexType>
+<simpleType name="UserRoleCapability">
+<annotation>
+<documentation>
+			...
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Primary"/>
+<enumeration value="Secondary"/>
+<enumeration value="Leader"/>
+</restriction>
+</simpleType>
+<complexType name="PendingUser">
+<annotation>
+<documentation>
+				...
+			</documentation>
+</annotation>
+<sequence>
+<element name="userName" type="xsd:string"/>
+<element name="role" type="xsd:string"/>
+<element name="capability" type="impl:UserRoleCapability"/>
+</sequence>
+</complexType>
+<complexType name="PendingUserArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="pendingUser" type="impl:PendingUser"/>
+</sequence>
+</complexType>
+<complexType name="TransferScripts">
+<annotation>
+<documentation>
+				Specifies the transfer script set.
+			</documentation>
+</annotation>
+<sequence>
+<element minOccurs="0" name="preScript" type="xsd:string"/>
+<element minOccurs="0" name="postScript" type="xsd:string"/>
+<element minOccurs="0" name="failScript" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="ItemFile">
+<annotation>
+<documentation>
+				Describes Item as File instance.
+			</documentation>
+</annotation>
+<sequence>
+<element name="name" type="xsd:string"/>
+<element name="modificationTime" type="xsd:dateTime"/>
+<element minOccurs="0" name="fileContents" type="xsd:base64Binary"/>
+</sequence>
+</complexType>
+<complexType name="ItemFileFolder">
+<annotation>
+<documentation>
+				Folder of Items.
+			</documentation>
+</annotation>
+<sequence>
+<element name="name" type="xsd:string"/>
+<element maxOccurs="unbounded" minOccurs="0" name="file" type="impl:ItemFile"/>
+</sequence>
+</complexType>
+<complexType name="ItemInfo">
+<annotation>
+<documentation>
+				Simple Item information.
+			</documentation>
+</annotation>
+<sequence>
+<element name="itemSpec" type="xsd:string"/>
+<element name="fileName" type="xsd:string"/>
+<element name="status" type="xsd:string"/>
+<element name="revision" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="ItemInfoFolder">
+<annotation>
+<documentation>
+				Folder of Simple Items.
+			</documentation>
+</annotation>
+<sequence>
+<element name="name" type="xsd:string"/>
+<element maxOccurs="unbounded" minOccurs="0" name="item" type="impl:ItemInfo"/>
+</sequence>
+</complexType>
+<simpleType name="RelationshipDirection">
+<annotation>
+<documentation>
+				The direction between related objects.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Parent"/>
+<enumeration value="Child"/>
+</restriction>
+</simpleType>
+<complexType name="AreaArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="area" type="xsd:string"/>
+</sequence>
+</complexType>
+<simpleType name="ProjectItemValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between a Project and an Item.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Owned"/>
+</restriction>
+</simpleType>
+<simpleType name="ProjectRequestValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between a Project and a Request.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Owned"/>
+</restriction>
+</simpleType>
+<complexType name="ProjectRelatedItem">
+<annotation>
+<documentation>
+				The relationship between a Project and an Item.
+			</documentation>
+</annotation>
+<sequence>
+<element name="itemSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The item specification of the related Item.
+						It comprises: "productId:itemId.variant-type;revision"
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:ProjectItemValidRels">
+<annotation>
+<documentation>
+						The type of relationship between a Project and an Item.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="ProjectRelatedItemArray">
+<annotation>
+<documentation>
+				This is an array of Items related to the Project.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedItem" type="impl:ProjectRelatedItem"/>
+</sequence>
+</complexType>
+<complexType name="ProjectRelatedRequest">
+<annotation>
+<documentation>
+				The relationship between a Project and a Request.
+			</documentation>
+</annotation>
+<sequence>
+<element name="requestId" type="xsd:string">
+<annotation>
+<documentation>
+						The id of the related Request.
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:ProjectRequestValidRels">
+<annotation>
+<documentation>
+						The type of relationship between a Project and a Request.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="ProjectRelatedRequestArray">
+<annotation>
+<documentation>
+				The array of Requests related to the Project.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedRequest" type="impl:ProjectRelatedRequest"/>
+</sequence>
+</complexType>
+<simpleType name="BaselineBaselineValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between two Baselines.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Usage"/>
+</restriction>
+</simpleType>
+<simpleType name="BaselineRequestValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between a Baseline and a Request.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Affected"/>
+<enumeration value="Affected(revised)"/>
+<enumeration value="In Response To"/>
+<enumeration value="In Response To(revised)"/>
+<enumeration value="Information"/>
+</restriction>
+</simpleType>
+<complexType name="BaselineRelatedBaseline">
+<annotation>
+<documentation>
+				The relationship between two Baselines.
+			</documentation>
+</annotation>
+<sequence>
+<element name="baselineSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The specification of the related Baseline. It comprises: "productId:baselineId"
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:BaselineBaselineValidRels">
+<annotation>
+<documentation>
+						The type of relationship between two Baselines.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="BaselineRelatedBaselineArray">
+<annotation>
+<documentation>
+				The array of Baselines related to the Baseline.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedBaseline" type="impl:BaselineRelatedBaseline"/>
+</sequence>
+</complexType>
+<complexType name="BaselineRelatedRequest">
+<annotation>
+<documentation>
+				The relationship between a Baseline and a Request.
+			</documentation>
+</annotation>
+<sequence>
+<element name="requestId" type="xsd:string">
+<annotation>
+<documentation>
+						The id of the related Request.
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:BaselineRequestValidRels">
+<annotation>
+<documentation>
+						The type of relationship between the Baseline and Request.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="BaselineRelatedRequestArray">
+<annotation>
+<documentation>
+				The array of Requests related to the Baseline.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedRequest" type="impl:BaselineRelatedRequest"/>
+</sequence>
+</complexType>
+<simpleType name="ItemPartValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between an item and a design part.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Owned"/>
+<enumeration value="Usage"/>
+</restriction>
+</simpleType>
+<simpleType name="ItemRequestValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between an item and a change request.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Affected"/>
+<enumeration value="In-Response To"/>
+<enumeration value="Information"/>
+</restriction>
+</simpleType>
+<simpleType name="ItemBaselineValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between an item and a baseline.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Owned"/>
+</restriction>
+</simpleType>
+<simpleType name="ItemProjectValidRels">
+<restriction base="xsd:string">
+<enumeration value="Owned"/>
+</restriction>
+</simpleType>
+<complexType name="ItemRelatedPart">
+<annotation>
+<documentation>
+				The relationship between an Item and a Design Part.
+			</documentation>
+</annotation>
+<sequence>
+<element name="partSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The id of the Design Part related to the Item.
+						It comprises: "productId:partId"
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:ItemPartValidRels">
+<annotation>
+<documentation>
+						The type of relationship between the Item and Design Part.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="ItemRelatedPartArray">
+<annotation>
+<documentation>
+				This is an array of Item to Design Part relationships.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedPart" type="impl:ItemRelatedPart"/>
+</sequence>
+</complexType>
+<complexType name="ItemRelatedItem">
+<annotation>
+<documentation>
+				The relationship between two Items.
+			</documentation>
+</annotation>
+<sequence>
+<element name="itemSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The item specification of the related Item.
+						It comprises: "productId:itemId.variant-type;revision"
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="xsd:string">
+<annotation>
+<documentation>
+						The type of relationship between the Item and Item.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="ItemRelatedItemArray">
+<annotation>
+<documentation>
+				This is an array of Item to Item relationships.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedItem" type="impl:ItemRelatedItem"/>
+</sequence>
+</complexType>
+<complexType name="ItemRelatedRequest">
+<annotation>
+<documentation>
+				The relationship between an Item and a Change Request.
+			</documentation>
+</annotation>
+<sequence>
+<element name="requestId" type="xsd:string">
+<annotation>
+<documentation>
+						The id of the related Change Request.
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:ItemRequestValidRels">
+<annotation>
+<documentation>
+						The type of relationship between the Item and Change Request.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="ItemRelatedRequestArray">
+<annotation>
+<documentation>
+				The array of Change Requests related to the Item.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedRequest" type="impl:ItemRelatedRequest"/>
+</sequence>
+</complexType>
+<complexType name="ItemRelatedBaseline">
+<annotation>
+<documentation>
+				The relationship between an Item and a Baseline.
+			</documentation>
+</annotation>
+<sequence>
+<element name="baselineSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The specification of the related Baseline. It comprises: "productId:baselineId"
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:ItemBaselineValidRels">
+<annotation>
+<documentation>
+						The type of relationship between the Item and Baseline.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="ItemRelatedBaselineArray">
+<annotation>
+<documentation>
+				The array of baselines related to the Item.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedBaseline" type="impl:ItemRelatedBaseline"/>
+</sequence>
+</complexType>
+<complexType name="ItemRelatedProject">
+<annotation>
+<documentation>
+				The relationship between an Item and a Project.
+			</documentation>
+</annotation>
+<sequence>
+<element name="projectSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The specification of the related Project. It comprises: "productId:projectId"
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:ItemProjectValidRels">
+<annotation>
+<documentation>
+						The type of relationship between the Item and Project.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="ItemRelatedProjectArray">
+<annotation>
+<documentation>
+				The array of projects related to an Item.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedProject" type="impl:ItemRelatedProject"/>
+</sequence>
+</complexType>
+<simpleType name="RequestPartValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between a change request and a design part.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Affected"/>
+</restriction>
+</simpleType>
+<simpleType name="RequestItemValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between a change request and an item.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Affected"/>
+<enumeration value="In Response To"/>
+<enumeration value="Information"/>
+</restriction>
+</simpleType>
+<simpleType name="RequestRequirementValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between a change request and a change request.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Breakdown"/>
+</restriction>
+</simpleType>
+<simpleType name="RequestBaselineValidRels">
+<annotation>
+<documentation>
+				The valid system defined relationships between a change request and a baseline.
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Affected"/>
+<enumeration value="Affected(revised)"/>
+<enumeration value="In Response To"/>
+<enumeration value="In Response To(revised)"/>
+<enumeration value="Information"/>
+</restriction>
+</simpleType>
+<complexType name="RequestRelatedPart">
+<annotation>
+<documentation>
+				The relationship between a Request and a Design Part.
+			</documentation>
+</annotation>
+<sequence>
+<element name="partSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The specification of the related Design Part.
+						It comprises: "productId:part-id.variant;pcs"
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:RequestPartValidRels">
+<annotation>
+<documentation>
+						The type of relationship between the change request and design part.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="RequestRelatedPartArray">
+<annotation>
+<documentation>
+				The array of Design Parts related to Request.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="RelatedPart" type="impl:RequestRelatedPart"/>
+</sequence>
+</complexType>
+<complexType name="RequestRelatedItem">
+<annotation>
+<documentation>
+				The relationship between a Request and an Item.
+			</documentation>
+</annotation>
+<sequence>
+<element name="itemSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The specification of the related item. 
+						It comprises: "productId:itemId.variant-type;revision"
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:RequestItemValidRels">
+<annotation>
+<documentation>
+						The type of relationship between the Change Request and Item.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="RequestRelatedItemArray">
+<annotation>
+<documentation>
+				The array of Items related to Request.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedItem" type="impl:RequestRelatedItem"/>
+</sequence>
+</complexType>
+<complexType name="RequestRelatedRequest">
+<annotation>
+<documentation>
+				The relationship between two Requests.
+			</documentation>
+</annotation>
+<sequence>
+<element name="requestId" type="xsd:string">
+<annotation>
+<documentation>
+						The id of the related Change Request.
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="xsd:string">
+<annotation>
+<documentation>
+						The type of relationship between the Change Requests.
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipDirection" type="impl:RelationshipDirection">
+<annotation>
+<documentation>
+						The direction of relationship between the Change Requests.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="RequestRelatedRequestArray">
+<annotation>
+<documentation>
+				The array of Requests related to Request.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedRequest" type="impl:RequestRelatedRequest"/>
+</sequence>
+</complexType>
+<complexType name="RequestRelatedRequirement">
+<annotation>
+<documentation>
+				The relationship between a Request and a RM Requirement.
+			</documentation>
+</annotation>
+<sequence>
+<element name="requirementSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The id of the related RM Requirement.
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:RequestRequirementValidRels">
+<annotation>
+<documentation>
+						The type of relationship between the Change Request and the RM Requirement.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="RequestRelatedRequirementArray">
+<annotation>
+<documentation>
+				The array of RM Requirements related to Request.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedRequirement" type="impl:RequestRelatedRequirement"/>
+</sequence>
+</complexType>
+<complexType name="RequestRelatedBaseline">
+<annotation>
+<documentation>
+				The relationship between a Request and a Baseline.
+			</documentation>
+</annotation>
+<sequence>
+<element name="baselineSpec" type="xsd:string">
+<annotation>
+<documentation>
+						The specification of the related Baseline.
+						It comprises: "productId:baselineId"
+					</documentation>
+</annotation>
+</element>
+<element name="relationshipType" type="impl:RequestBaselineValidRels">
+<annotation>
+<documentation>
+						The type of relationship between the Change Request and Baseline.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="RequestRelatedBaselineArray">
+<annotation>
+<documentation>
+				The array of Baselines related to Request.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedBaseline" type="impl:RequestRelatedBaseline"/>
+</sequence>
+</complexType>
+<simpleType name="JobStatus">
+<restriction base="xsd:string">
+<enumeration value="Unknown"/>
+<enumeration value="Active"/>
+<enumeration value="Canceled"/>
+<enumeration value="Finished"/>
+<enumeration value="Inactive"/>
+<enumeration value="Running"/>
+<enumeration value="Cancelling"/>
+</restriction>
+</simpleType>
+<simpleType name="JobRunStatus">
+<restriction base="xsd:string">
+<enumeration value="Error"/>
+<enumeration value="Failed"/>
+<enumeration value="Success"/>
+</restriction>
+</simpleType>
+<complexType name="JobStatusArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="status" type="impl:JobStatus"/>
+</sequence>
+</complexType>
+<simpleType name="JobRepeatType">
+<restriction base="xsd:string">
+<enumeration value="Unknown"/>
+<enumeration value="Minutes"/>
+<enumeration value="Hours"/>
+<enumeration value="Days"/>
+</restriction>
+</simpleType>
+<complexType name="JobRepeat">
+<sequence>
+<element name="repeatTime" type="xsd:int"/>
+<element name="repeatType" type="impl:JobRepeatType"/>
+</sequence>
+</complexType>
+<simpleType name="JobObjectType">
+<restriction base="xsd:string">
+<enumeration value="Unknown"/>
+<enumeration value="Item"/>
+<enumeration value="Request"/>
+<enumeration value="Baseline"/>
+<enumeration value="DeploymentJob"/>
+</restriction>
+</simpleType>
+<complexType name="NewScheduleJob">
+<annotation>
+<documentation>
+				This object represents a Dimensions Schedule Job to be created in the repository. 
+				Use this objects when creating a new Dimensions Schedule Job.
+			</documentation>
+</annotation>
+<sequence>
+<element name="jobName" type="xsd:string"/>
+<element name="startTime" type="xsd:dateTime"/>
+<element minOccurs="0" name="status" type="impl:JobStatus"/>
+<element minOccurs="0" name="repeat" type="impl:JobRepeat"/>
+<element minOccurs="0" name="description" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="ScheduleJobCommand">
+<annotation>
+<documentation>
+				This object represents a related command to a scheduled job. 
+			</documentation>
+</annotation>
+<sequence>
+<element name="relationUid" type="xsd:long"/>
+<element name="commandUid" type="xsd:long"/>
+<element name="createTime" type="xsd:dateTime"/>
+<element name="command" type="xsd:string"/>
+<element minOccurs="0" name="objectUid" type="xsd:long"/>
+<element minOccurs="0" name="objectSpec" type="xsd:string"/>
+<element minOccurs="0" name="objectType" type="impl:JobObjectType"/>
+</sequence>
+</complexType>
+<complexType name="RelatedScheduleJobCommandArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedCommands" type="impl:ScheduleJobCommand"/>
+</sequence>
+</complexType>
+<complexType name="ScheduleJobCommandRunStatus">
+<annotation>
+<documentation>
+				Detailed information about command that was run in a Scheduled Job
+			</documentation>
+</annotation>
+<sequence>
+<element name="relationUid" type="xsd:long"/>
+<element name="commandUid" type="xsd:long"/>
+<element name="createTime" type="xsd:dateTime"/>
+<element name="user" type="xsd:string"/>
+<element minOccurs="0" name="objectUid" type="xsd:long"/>
+<element minOccurs="0" name="objectSpec" type="xsd:string"/>
+<element minOccurs="0" name="objectType" type="impl:JobObjectType"/>
+<element name="command" type="xsd:string"/>
+<element name="status" type="impl:JobRunStatus"/>
+<element name="output" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="ScheduleJobCommandRunStatusArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="commandStatus" type="impl:ScheduleJobCommandRunStatus"/>
+</sequence>
+</complexType>
+<complexType name="ScheduleJob">
+<annotation>
+<documentation>
+				This object represents a Dimensions Schedule Job already in the repository. 
+				Use this object to reference an existing Dimensions Schedule Job.
+			</documentation>
+</annotation>
+<sequence>
+<element name="jobUid" type="xsd:long"/>
+<element name="jobName" type="xsd:string"/>
+<element name="startTime" type="xsd:dateTime"/>
+<element name="createTime" type="xsd:dateTime"/>
+<element name="updateTime" type="xsd:dateTime"/>
+<element name="status" type="impl:JobStatus"/>
+<element name="originator" type="xsd:string"/>
+<element minOccurs="0" name="repeat" type="impl:JobRepeat"/>
+<element minOccurs="0" name="description" type="xsd:string"/>
+<element minOccurs="0" name="relatedCommands" type="impl:RelatedScheduleJobCommandArray"/>
+<element minOccurs="0" name="relatedHistories" type="impl:RelatedScheduleJobHistoryArray"/>
+</sequence>
+</complexType>
+<complexType name="ScheduleJobHistory">
+<annotation>
+<documentation>
+				This object represents a related history to a scheduled job. 
+			</documentation>
+</annotation>
+<sequence>
+<element name="historyUid" type="xsd:long"/>
+<element name="status" type="impl:JobStatus"/>
+<element name="user" type="xsd:string"/>
+<element name="startTime" type="xsd:dateTime"/>
+<element minOccurs="0" name="finishTime" type="xsd:dateTime"/>
+</sequence>
+</complexType>
+<complexType name="RelatedScheduleJobHistoryArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="relatedHistories" type="impl:ScheduleJobHistory"/>
+</sequence>
+</complexType>
+<simpleType name="JobOrderName">
+<restriction base="xsd:string">
+<enumeration value="Name"/>
+<enumeration value="Date"/>
+<enumeration value="Status"/>
+</restriction>
+</simpleType>
+<simpleType name="JobOrderType">
+<restriction base="xsd:string">
+<enumeration value="ASC"/>
+<enumeration value="DESC"/>
+</restriction>
+</simpleType>
+<complexType name="JobSorting">
+<sequence>
+<element name="orderName" type="impl:JobOrderName"/>
+<element minOccurs="0" name="orderType" type="impl:JobOrderType"/>
+</sequence>
+</complexType>
+<complexType name="JobSortingArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="sorting" type="impl:JobSorting"/>
+</sequence>
+</complexType>
+<complexType name="DeploymentAreaType">
+<annotation>
+<documentation>
+			The area affected by deployment operation and the result for this area.
+			</documentation>
+</annotation>
+<sequence>
+<element name="name" type="xsd:string"/>
+<element minOccurs="0" name="success" type="xsd:boolean"/>
+<element minOccurs="0" name="version" type="xsd:int"/>
+</sequence>
+</complexType>
+<complexType name="DeploymentAreaArray">
+<annotation>
+<documentation>
+			The array of areas and deployment results.
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="area" type="impl:DeploymentAreaType"/>
+</sequence>
+</complexType>
+<simpleType name="DeploymentJobType">
+<restriction base="xsd:string">
+<enumeration value="Invalid"/>
+<enumeration value="Deploy"/>
+<enumeration value="Rollback"/>
+<enumeration value="Build Start"/>
+<enumeration value="Clean"/>
+<enumeration value="Audit"/>
+<enumeration value="Collect Outputs"/>
+<enumeration value="Build End"/>
+<enumeration value="Transaction Start"/>
+<enumeration value="Transaction End"/>
+<enumeration value="Command"/>
+<enumeration value="Start Scheduled Job"/>
+</restriction>
+</simpleType>
+<simpleType name="DeploymentJobStates">
+<restriction base="xsd:string">
+<enumeration value="Invalid"/>
+<enumeration value="Submitted"/>
+<enumeration value="Executing"/>
+<enumeration value="Succeeded"/>
+<enumeration value="Failed"/>
+<enumeration value="Canceled"/>
+<enumeration value="Paused"/>
+</restriction>
+</simpleType>
+<simpleType name="DeploymentCommandType">
+<restriction base="xsd:string">
+<enumeration value="Invalid"/>
+<enumeration value="Unknown"/>
+<enumeration value="Deliver"/>
+<enumeration value="Deploy"/>
+<enumeration value="Rollback"/>
+<enumeration value="Promote"/>
+<enumeration value="Demote"/>
+<enumeration value="Populate"/>
+<enumeration value="Audit"/>
+<enumeration value="Clean"/>
+<enumeration value="Build"/>
+<enumeration value="Action"/>
+</restriction>
+</simpleType>
+<complexType name="SubmittedDeploymentJob">
+<annotation>
+<documentation>
+				Deployment job attributes in the form of deployment job UID/job type pair.
+			</documentation>
+</annotation>
+<sequence>
+<element name="deploymentJobUID" type="xsd:string">
+<annotation>
+<documentation>Deployment job UID.</documentation>
+</annotation>
+</element>
+<element name="jobType" type="impl:DeploymentJobType">
+<annotation>
+<documentation>Deployment job type.</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="SubmittedDeploymentJobArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="deploymentJob" type="impl:SubmittedDeploymentJob"/>
+</sequence>
+</complexType>
+<simpleType name="DelegateRequestMode">
+<annotation>
+<documentation>
+			...
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Add"/>
+<enumeration value="Replace"/>
+<enumeration value="Remove"/>
+</restriction>
+</simpleType>
+<complexType name="BuildOption">
+<sequence>
+<element name="option" type="xsd:string"/>
+<element name="value" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="BuildOptionArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="buildOption" type="impl:BuildOption"/>
+</sequence>
+</complexType>
+<complexType name="BuildTargetNameArray">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="target" type="xsd:string"/>
+</sequence>
+</complexType>
+<simpleType name="BuildStatus">
+<annotation>
+<documentation>
+			...
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Success"/>
+<enumeration value="Cancelled"/>
+<enumeration value="Failed"/>
+</restriction>
+</simpleType>
+</schema>

@@ -1,0 +1,4427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://serena.com/dmwebservices2" xmlns:requests="http://serena.com/dimensions/requests/1" xmlns:impl="http://serena.com/dmwebservices2" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:basic="http://serena.com/dimensions/basic/1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:parts="http://serena.com/dimensions/parts/1" xmlns:intf="http://serena.com/dmwebservices2" xmlns:prj="http://serena.com/dimensions/projects/1">
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://serena.com/dmwebservices2" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://serena.com/dmwebservices2">
+
+			<xsd:import namespace="http://serena.com/dimensions/basic/1" schemaLocation="dmwebservices_basic.xml"/>
+			<xsd:import namespace="http://serena.com/dimensions/parts/1" schemaLocation="dmwebservices_parts.xml"/>
+			<xsd:import namespace="http://serena.com/dimensions/projects/1" schemaLocation="dmwebservices_projects.xml"/>
+			<xsd:import namespace="http://serena.com/dimensions/requests/1" schemaLocation="dmwebservices_requests.xml"/>
+
+			<!-- ============================================================================== -->
+			<!--  General types                                                                 -->
+			<!-- ============================================================================== -->
+			
+			<complexType name="DimensionsResult">
+				<annotation>
+					<documentation>General result from the Dimensions web service</documentation>
+				</annotation>
+				<sequence>
+					<element maxOccurs="1" minOccurs="1" name="result" type="xsd:boolean"/>
+					<element maxOccurs="1" minOccurs="0" name="objectSpec" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="url" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="description" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			
+			<complexType name="DimensionsResultArray">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="result" type="impl:DimensionsResult"/>
+				</sequence>
+			</complexType>
+
+
+
+			<!-- ============================================================================== -->
+			<!--  General related function parameters											-->
+			<!-- ============================================================================== -->
+
+
+			<element name="getVersion">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to get version information of CM</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="getVersionResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="serverType" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="highLevelRelease" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="lowLevelRelease" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="runCommand">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to get version information of CM</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="1" minOccurs="1" name="command" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="runCommandResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+
+			<!-- ============================================================================== -->
+			<!--  Project related function parameters                                           -->
+			<!-- ============================================================================== -->
+
+			<element name="createProject">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to Define New Project (DWS command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="1" minOccurs="1" name="project" type="prj:NewProject"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="createProjectResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="projectURL" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="listProjectItems">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to create a list Items within Project</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>This structure specifies the connection details for the Dimensions server.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;project-spec&gt;
+									Comprises: &lt;product-id&gt;:&lt;project-id&gt;
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="directory" type="xsd:string">
+							<annotation>
+								<documentation>
+									This parameter specifies a directory path. It is matched to the corresponding project, 
+									the files in that project directory are enumerated.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="recursive" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									Recursively list all project directories from the point defined above.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="allRevisions" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									List all or latest revisions of Items.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="types" type="basic:ItemTypeArray">
+							<annotation>
+								<documentation>
+									A list of item types.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="userName" type="xsd:string">
+							<annotation>
+								<documentation>
+									A user name, required only for retrieving of items which in the user inbox.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="listProjectItemsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="0" name="items" type="basic:ItemInfoFolder"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="listProjectRequests">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to list Project Requests</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>This structure specifies the connection details for the Dimensions server.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;project-spec&gt;
+									Comprises: &lt;product-id&gt;:&lt;project-id&gt;
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="userName" type="xsd:string">
+							<annotation>
+								<documentation>
+									A user name, required only for retrieving of requests which in the user inbox.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="types" type="basic:RequestTypeArray">
+							<annotation>
+								<documentation>
+									A list of request types.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="listProjectRequestsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="0" name="requestId" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="buildProject">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to build Project (BLD command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;project-spec&gt;
+									Specifies the name of a project.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="areaName" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;area-name&gt;
+									Specifies the Dimensions area to be used for the build. If this is not specified, all areas
+									associated with the build configuration or configurations are used.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="areaType" type="xsd:string">
+							<annotation>
+								<documentation>
+								Build area type (deployment or work).
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="stage" type="xsd:string">
+							<annotation>
+								<documentation>
+								Applicable only to deployment areas. If the area type is DEPLOYMENT, this qualifier specifies the stage for which the targets are to be built.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="audit" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/AUDIT
+									Specifies that an audit is to be run before the build.
+									
+									Default: no audit
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="wait" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/BATCH
+									Specifies that the build is to be run in batch mode (the command does not wait for the
+									build to finish).
+									
+									Default: no batch.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="buildConfigurationName" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;build-configuration-name&gt;
+									Specifies the build configuration. If this is not specified, all build configurations
+									associated with the Dimensions project are used.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="buildOptions" type="basic:BuildOptionArray">
+							<annotation>
+								<documentation>
+									/BUILD_OPTIONS=(&lt;opt1&gt;=&lt;value1&gt;,&lt;opt2&gt;=&lt;value2&gt;,..)
+									Specifies any build options.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="targetNames" type="basic:BuildTargetNameArray">
+							<annotation>
+								<documentation>
+								Specifies the list of targets to be built. 
+								If this is omitted, all targets for the project are built.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="requestIds" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+								/CHANGE_DOC_IDS=(&lt;request1&gt;,&lt;request2&gt;,..)
+								
+								&lt;requestN&gt; identifies a request to which the new items created from the built
+								final targets are to be related in-Response-to if required by
+								change management rules.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="capture" type="xsd:boolean">
+							<annotation>
+								<documentation>
+								Specifies whether built targets are to be collected. 
+								It is not possible to collect default targets when building at the DEVELOPMENT stage.
+								
+								Default: no capture.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="populate" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									Download files to work area before each build.
+									
+									Default: no populate.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="touch" type="xsd:boolean">
+							<annotation>
+								<documentation>
+								Apply system date/time to downloaded files.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="traverseRequests" type="xsd:boolean">
+							<annotation>
+								<documentation>
+								Build area type (deployment or work).
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="buildClean" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/BUILD_CLEAN
+									Specifies that the area is to be cleaned of targets before the build process begins.
+									
+									Default: no clean.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="buildProjectResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResultArray"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="listProjects">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to list Projects (LWS command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>		
+
+			<element name="listProjectsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="1" name="result" type="prj:ProjectDetails"/>
+					</sequence>
+				</complexType>
+			</element>				
+
+			<!-- ============================================================================== -->
+			<!--  Part related function parameters                                              -->
+			<!-- ============================================================================== -->
+
+			<element name="createDesignPart">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to Create Design Part (CP command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="1" minOccurs="1" name="designPart" type="parts:NewDesignPart"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="createDesignPartResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="designPartSpec" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<!-- ============================================================================== -->
+			<!--  Item related function parameters                                              -->
+			<!-- ============================================================================== -->
+
+			<element name="getItems">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to Get Project or Baseline Items (DOWNLOAD command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									This structure specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									The project from which to download the files 
+									(The projectSpec or baselineSpec must be specified).
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="baselineSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									The baseline from which to download the files.
+									(The projectSpec or baselineSpec must be specified).
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="directory" type="xsd:string">
+							<annotation>
+								<documentation>
+									This parameter specifies a directory path. It is matched to the corresponding project
+									or baseline directory, the files in that project or baseline directory are enumerated,
+									and each one that has not been been modified is downloaded.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="fileNames" type="basic:FileNameArray">
+							<annotation>
+								<documentation>
+									This optional qualifier specify a list of file names to be downloaded 
+									from the project or baseline. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="itemSpecs" type="basic:ItemSpecArray">
+							<annotation>
+								<documentation>
+									This optional qualifier specify a list of item specifications to be downloaded 
+									from the project or baseline.  This qualifier allows you to efficiently download 
+									an arbitrary set of items from Dimensions using the complete item specifications.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="filter" type="xsd:string">
+							<annotation>
+								<documentation>
+									Specifies that DOWNLOAD will get only files that satisfy the criteria.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="targetDirectory" type="xsd:string">
+							<annotation>
+								<documentation>
+									Specifies the target Directory in &quot;work area&quot; to download files into.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="transferScripts" type="basic:TransferScripts">
+							<annotation>
+								<documentation>
+									Specifies the transfer script set to be executed as items are fetched during the command's execution. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="codepage" type="xsd:string">
+							<annotation>
+								<documentation>
+									The code page to be associated with the item.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="expand" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									Specifies substitution variable expansion.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="recursive" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									If directory is specified and this qualifier is not present, 
+									all files in all directories beneath the one specified are downloaded. 
+									/NORECURSIVE specifies that only files at the specified directory level are downloaded.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="touch" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									Sets the modification time of the user file to the current system time.
+
+									(This parameter works only if targetDirectory is specified)
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="overwrite" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									By default, DOWNLOAD does not overwrite files in the operation root directory that
+									have no metadata, are locally modified, are checked out to the operation root
+									directory, or correspond to an item different from the one being fetched (that is, files
+									that have different &lt;product&gt;:&lt;item-id&gt;.&lt;variant&gt;-&lt;type&gt; pairs).
+									If /OVERWRITE is specified, DOWNLOAD overwrites such files with the content of
+									corresponding project or baseline item revisions.
+
+									(This parameter works only if targetDirectory is specified)
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="conflictCheck" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									Specifies that DOWNLOAD will search for unresolved merge conflicts for each item
+									revision to be fetched. If any unresolved conflicts are found, Dimensions issues a
+									warning and ignores the corresponding revision. 
+									By default, DOWNLOAD does not perform this check.
+
+									(This parameter works only if targetDirectory is specified)
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="noMetadata" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									This parameter disables creation and usage of metadata files in the local work area.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="getItemsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="result" type="xsd:string"/>
+						<element maxOccurs="unbounded" minOccurs="0" name="items" type="basic:ItemFileFolder"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="checkOutItem">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to check-out Item (EI command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="itemSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;item-spec&gt;
+									Comprises: &lt;product-id&gt;:&lt;item-id&gt;.&lt;variant&gt;-&lt;item-type&gt;;&lt;revision&gt;
+									
+									&lt;item-id&gt; may be omitted if &lt;file-name&gt; is specified.
+									&lt;variant&gt; may be omitted if only one exists.
+									&lt;revision&gt; defaults to the latest revision in the project specified by /WORKSET. 
+									If /WORKSET is unspecified, the user's current project will be assumed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									If specified, the new revision of the item will be placed in the project, otherwise it will
+									be placed in the user's current project.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="baselineSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/BASELINE=&lt;baseline-spec&gt;
+									Specifies a release-baseline which contains the particular revision of &lt;item-spec&gt; to
+									be selected. (As it is in a baseline, a new revision must of course be checked out as a copy of it.) 
+									&lt;baseline-spec&gt; comprises:&lt;product-id&gt;:&lt;baseline-id&gt;
+									If omitted, the specified or default &lt;revision&gt; (as described above) is selected for checking out.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="fileName" type="xsd:string">
+							<annotation>
+								<documentation>
+									/FILENAME=&lt;file-name&gt;
+									Specifies the name of the project file name. If /ROOT_PROJECT is used to specify a
+									the root project, /FILENAME is interpreted in the scope of that project.
+									The project file name identifies the relative path (directory plus file name) from the
+									working location of the file to be used when the item is checked out from the current
+									project. The project file name for the same item may differ between projects; for
+									example, src/hello.c, hello.c, or src/build/hello.c.
+									It may be omitted if &lt;item-id&gt; is specified.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="targetFileName" type="xsd:string">
+							<annotation>
+								<documentation>
+									Specifies the name of the file which will be created in the &quot;work-area&quot;, 
+									and into which the item will be copied.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="revision" type="xsd:string">
+							<annotation>
+								<documentation>
+									/REVISION=&lt;new-revision&gt;
+									Specifies a new revision for the item. This new revision will be placed in the project
+									specified by /WORKSET. If /WORKSET is omitted, then the new revision will be placed in
+									the user's default project.
+									If omitted, Dimensions increments the current revision (the rightmost subfield only),
+									unless the item revision in &lt;item-spec&gt; is at its initial lifecycle state. 
+									In this case, the revision is unchanged.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="attributes" type="basic:AttributeArray">
+							<annotation>
+								<documentation>
+									/ATTRIBUTES=(&lt;attr1&gt;=&lt;value1&gt;,&lt;attr2&gt;=&lt;value2&gt;,..)
+									&lt;attrN&gt; is the Variable Name defined for one of the user-defined attributes for
+									items, which has also been declared usable for the &lt;product-id&gt;
+									and &lt;item-type&gt; specified in &lt;item-spec&gt;.
+									&lt;valueN&gt; is the substitution value to be given to this attribute.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="requestIds" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									/CHANGE_DOC_IDS=(&lt;request1&gt;,&lt;request2&gt;,..)
+									&lt;requestN&gt; identifies a request to which the item revision is to be related in-Response-to.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="codepage" type="xsd:string">
+							<annotation>
+								<documentation>
+									Specify one of the code page values listed in the text file
+									codepage.txt, located on your Dimensions server in the
+									codepage subdirectory of the Dimensions installation directory.
+									This file also provides more information about translation
+									between code pages.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="touch" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									Sets the modification time of the user file to the current system time.
+									(This parameter works only if targetFileName is specified)
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="overwrite" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									When checking out an item revision, specify whether or not Dimensions is allowed to
+									perform this operation depending on:
+
+									* The existence of a local file of the same name.
+									* The status (read-only or writeable) of an existing local file of the same name.
+
+									/NOOVERWRITE - which is normally the default but which can be reassigned using the
+									SET OVERWRITE command described on page 328 - results in a file only being
+									successfully checked out by Dimensions if the local (target) file does not already exist
+									or is marked read-only. This is the traditional Dimensions behavior (with respect to
+									the file being read-only, the assumption is that if it is writable then the file could
+									potentially be a more recently modified revision of the item that the user does not
+									want to lose).
+									/OVERWRITE results in the file being successfully checked out by Dimensions
+									irrespective of the existence or writeable status of any local (target) file.
+
+									(This parameter works only if targetFileName is specified)
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="noMetadata" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									This parameter disables creation and usage of metadata files in the local work area.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="checkOutItemResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="itemSpec" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="itemURL" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="fileContents" type="xsd:base64Binary"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="checkInItem">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to check-out Item (EI command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="itemSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;item-spec&gt;
+									Comprises: &lt;product-id&gt;:&lt;item-id&gt;.&lt;variant&gt;-&lt;item-type&gt;;&lt;revision&gt;
+									&lt;item-id&gt; may be omitted if &lt;file-name&gt; is specified.
+									&lt;variant&gt; may be omitted if only one exists.
+									&lt;revision&gt; may be omitted if you have checked out only one revision of this item.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises: &lt;product-id&gt;:&lt;project-id&gt;
+									and is optional (subject to the following). A checked out item can only be checked in
+									to the specific project from which it was originally checked out (an error will be
+									generated if you try to check it in to another project). Therefore, if your current
+									project is not that project, either this qualifier must be used to specify the correct
+									check in &lt;project-spec&gt; or your current project must be set to that
+									&lt;project-spec&gt; using the Set Current Project (SCWS) command.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="fileName" type="xsd:string">
+							<annotation>
+								<documentation>
+									/FILENAME=&lt;file-name&gt;
+									Specifies the name of the project file name. If /ROOT_PROJECT is used to specify a
+									the root project, /FILENAME is interpreted in the scope of that project.
+									The project file name identifies the relative path (directory plus file name) from the
+									working location to the item to be used from the current project. The project file name
+									for the same item may differ between projects; for example, src/hello.c, hello.c,
+									or src/build/hello.c.
+									It may be omitted if &lt;item-id&gt; is specified.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="sourceFileName" type="xsd:string">
+							<annotation>
+								<documentation>
+									Specifies the file in the &quot;work-area&quot; from which the item will be copied.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="status" type="xsd:string">
+							<annotation>
+								<documentation>
+									/STATUS=&lt;status&gt;
+									Specifies a valid changed status (lifecycle state) for the checked in revision.
+									NOTE: The only equivalent to this parameter in GUI mode is RI followed by AI. The
+									status, if specified, must be one which would be valid if AI had been used separately.
+									If omitted, the revision remains at the initial state (in the lifecycle defined for &lt;item-type&gt;).
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text to explain the reason for the check in of this item revision. The
+									comment text can be up to 1978 characters long, and can be made available within
+									the item header.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="attributes" type="basic:AttributeArray">
+							<annotation>
+								<documentation>
+									/ATTRIBUTES=(&lt;attr1&gt;=&lt;value1&gt;,&lt;attr2&gt;=&lt;value2&gt;,..)
+									&lt;attrN&gt; is the Variable Name defined for one of the user-defined attributes for
+									items, which has also been declared usable for the &lt;product-id&gt;
+									and &lt;item-type&gt; specified in &lt;item-spec&gt;.
+									&lt;valueN&gt; is the substitution value to be given to this attribute.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="forceUpdate" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/FORCE_UPDATE
+									If the checksum is enabled for the item type and the file checked in has not been
+									modified, the check in will succeed only if this qualifier is used, otherwise it will fail.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="checkInUnchanged" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/CANCEL_UNCHANGED performs a CIU (Cancel Item Update) command if the user file
+									does not differ from the base revision and Dimensions is configured to allow updates
+									only if a real change is made.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="codepage" type="xsd:string">
+							<annotation>
+								<documentation>
+									Specify one of the code page values listed in the text file
+									codepage.txt, located on your Dimensions server in the
+									codepage subdirectory of the Dimensions installation directory.
+									This file also provides more information about translation
+									between code pages.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="contentEncoding" type="xsd:string">
+							<annotation>
+								<documentation>
+									/CONTENT_ENCODING=&lt;file-encoding&gt;
+									Specifies the content encoding for new item revisions to be created. Supported
+									encodings are the Microsoft codepages, the ISO-8859 variants (1-10), UTF-8,
+									UTF-16, UTF-16BE, UTF-16LE, UTF32, UTF32BE, and UTF32LE.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="keep" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									Specifies that the user area file, which is normally deleted after its data has been
+									placed under Dimensions control, is to be left intact.
+
+									If the command is successful and /KEEP is specified, local metadata is updated; the
+									new revision number is recorded and marked as no longer checked out. /NOKEEP
+									causes the local metadata to be deleted as well as the file.
+
+									(This parameter works only if sourceFileName is specified)
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="fileContents" type="xsd:base64Binary">
+							<annotation>
+								<documentation>
+									Encoded file contents.
+									(This parameter works only if sourceFileName is not specified)
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="checkInItemResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="itemSpec" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="itemURL" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="relateItemsToParts">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to relate Items to Parts (RIP command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="itemSpecs" type="basic:ItemSpecArray">
+							<annotation>
+								<documentation>
+									&lt;item-spec&gt; comprises: &lt;product-id&gt;:&lt;item-id&gt;.&lt;variant&gt;-&lt;item-type&gt;;&lt;revision&gt;
+									&lt;variant&gt; may be omitted if only one exists.
+									&lt;revision&gt; is ignored; all revisions are related to the specified design part.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="partSpecs" type="basic:PartSpecArray">
+							<annotation>
+								<documentation>
+									/PART=&lt;part-spec&gt; comprises: &lt;product-id&gt;:&lt;part-id&gt;.&lt;variant&gt;;&lt;pcs&gt;
+									&lt;variant&gt; may be omitted if only one exists.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises: &lt;product-id&gt;:&lt;project-id&gt;
+									This optionally specifies the project to be used for this command: failing this, the
+									user's current project will be taken.
+									Item revisions to be affected by the command may be specified explicitly, or they will
+									be selected from the project.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="continueOnError" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									if the value of CONTINUE_ON_ERROR is false, if one of the commands fails the WS doesn't continue 
+									with the execution of the subsequent commands and returns an error, 
+
+									if the value of CONTINUE_ON_ERROR is true, if one of the commands fails the WS continues 
+									to try to execute the subsequent commands and returns errors for each of the failing commands.
+								</documentation>
+							</annotation>
+						</element>		
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="relateItemsToPartsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="results" type="impl:DimensionsResultArray"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="moveItemToPart">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to move Item to Another Part (MIP command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="itemSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;item-spec&gt; comprises: &lt;product-id&gt;:&lt;item-id&gt;.&lt;variant&gt;-&lt;item-type&gt;;&lt;revision&gt;
+									&lt;item-id&gt; may be omitted if &lt;file-name&gt; is specified.
+									&lt;variant&gt; may be omitted if only one exists.
+									&lt;revision&gt; is ignored; all revisions are moved to the specified design part.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="fileName" type="xsd:string">
+							<annotation>
+								<documentation>
+									/FILENAME=&lt;file-name&gt;
+									Specifies the name of the library file name.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="partSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/PART=&lt;part-spec&gt; comprises: &lt;product-id&gt;:&lt;part-id&gt;.&lt;variant&gt;;&lt;pcs&gt;
+									&lt;variant&gt; may be omitted if only one exists.
+									&lt;pcs&gt; is ignored; the current PCS is always used.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises: &lt;product-id&gt;:&lt;project-id&gt;
+									This optionally specifies the project to be used for this command: failing this, the
+									user's current project will be taken.
+									Item revisions to be affected by the command may be specified explicitly, or they will
+									be selected from the project.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="moveItemToPartResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="unrelateItemsFromParts">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to unrelate Items from Parts (XIP command)</documentation>
+					</annotation>
+					<sequence>
+					<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="itemSpecs" type="basic:ItemSpecArray">
+							<annotation>
+								<documentation>
+									&lt;item-spec&gt; comprises: &lt;product-id&gt;:&lt;item-id&gt;.&lt;variant&gt;-&lt;item-type&gt;;&lt;revision&gt;
+									&lt;variant&gt; may be omitted if only one exists.
+									&lt;revision&gt; is ignored; all revisions are related to the specified design part.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="partSpecs" type="basic:PartSpecArray">
+							<annotation>
+								<documentation>
+									/PART=&lt;part-spec&gt; comprises: &lt;product-id&gt;:&lt;part-id&gt;.&lt;variant&gt;;&lt;pcs&gt;
+									&lt;variant&gt; may be omitted if only one exists.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises: &lt;product-id&gt;:&lt;project-id&gt;
+									This optionally specifies the project to be used for this command: failing this, the
+									user's current project will be taken.
+									Item revisions to be affected by the command may be specified explicitly, or they will
+									be selected from the project.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="continueOnError" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									if the value of CONTINUE_ON_ERROR is false, if one of the commands fails the WS doesn't continue 
+									with the execution of the subsequent commands and returns an error, 
+
+									if the value of CONTINUE_ON_ERROR is true, if one of the commands fails the WS continues 
+									to try to execute the subsequent commands and returns errors for each of the failing commands.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="unrelateItemsFromPartsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="results" type="impl:DimensionsResultArray"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="promoteItems">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to promote Items (PMI command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="items" type="basic:ItemSpecArray">
+							<annotation>
+								<documentation>
+									Names of items that will be promoted. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="files" type="basic:FileNameArray">
+							<annotation>
+								<documentation>
+									Names of items that will be promoted. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the items(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the promotion operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="stage" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;new-stage&gt;
+									Specifies the target stage to promote the object to. 
+									This must be a stage from the global stage lifecycle, and there must be a transition
+									from the current stage to the new stage in the stage lifecycle in order for the command to succeed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="deploy" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/NODEPLOY
+									Cannot be combined with AREA_LIST and indicates that the AREA_LIST is not included on purpose as no deployment is to occur.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="promoteItemsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="demoteItems">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to demote Items (DMI command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="items" type="basic:ItemSpecArray">
+							<annotation>
+								<documentation>
+									Names of items that will be demoted. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="files" type="basic:FileNameArray">
+							<annotation>
+								<documentation>
+									Names of items that will be demoted. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the items(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the demotion operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="stage" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;new-stage&gt;
+									Specifies the target stage to promote the object to. 
+									This must be a stage from the global stage lifecycle, and there must be a transition
+									from the current stage to the new stage in the stage lifecycle in order for the command to succeed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="deploy" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/NODEPLOY
+									Cannot be combined with AREA_LIST and indicates that the AREA_LIST is not included on purpose as no deployment is to occur.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="demoteItemsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitDeployItems">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to submit deploy items (SDPI command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="items" type="basic:ItemSpecArray">
+							<annotation>
+								<documentation>
+									Items specifications that will be submitted for deploy. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="files" type="basic:FileNameArray">
+							<annotation>
+								<documentation>
+									File names of items that will be submitted for deploy. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the items(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the submit deploy operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="false" maxOccurs="1" minOccurs="0" name="returnSubmittedDeploymentJobs" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									When true, returns submitted deployment jobs along with the result.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitDeployItemsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="result" type="impl:DimensionsResult"/>
+						<element maxOccurs="1" minOccurs="0" name="deploymentJobs" type="basic:SubmittedDeploymentJobArray">
+							<annotation>
+								<documentation>
+									List of deployment job attributes in the form of deployment job UID/job type pairs. 
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitRollbackItems">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to submit rollback items (SRI command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="items" type="basic:ItemSpecArray">
+							<annotation>
+								<documentation>
+									Items specifications that will be submitted for rollback. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="files" type="basic:FileNameArray">
+							<annotation>
+								<documentation>
+									File names of items that will be submitted for rollback. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the items(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to roll back from.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the submit deploy operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitRollbackItemsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<!-- ============================================================================== -->
+			<!--  Baseline related function parameters                                          -->
+			<!-- ============================================================================== -->
+
+			<element name="createProjectBaseline">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to create Baseline (CBL command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="baselineSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;baseline-spec&gt; comprises: &lt;product-id&gt;:&lt;baseline-id&gt;
+									&lt;baseline-id&gt; is the identity to be given to the baseline.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="parentProjectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt;
+									comprises: &lt;product-id&gt;:&lt;project-id&gt;
+									and is optional. If specified, only the items in the project are considered for
+									baselining; otherwise, only the items in the user's current project are considered. 
+									See also, Dimensions LCK command (on page 202) concerning comment about locking the
+									project when baselining.
+									If /SCOPE=WORKSET is specified, this qualifier specifies the project to be baselined,
+									not the project to be used to constrain part-based revision selection.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="type" type="xsd:string">
+							<annotation>
+								<documentation>
+									/TYPE=&lt;baseline-type&gt;
+									Specifies the type of baseline being created.
+									If omitted, the default type is RELEASE if a &lt;template-id&gt; has been specified. 
+									(If /TYPE is not specified, then by default, a design baseline is created, which is 
+									simply a snapshot of the current stage of product development, and is not therefore 
+									expected to need an approval lifecycle.)
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="attributes" type="basic:AttributeArray">
+							<annotation>
+								<documentation>
+									/ATTRIBUTES=(&lt;attr1&gt;=&lt;value1&gt;,&lt;attr2&gt;=&lt;value2&gt;,..)
+									&lt;attrN&gt; is the Variable Name defined for one of the user-defined attributes
+									for baselines, which has also been declared as usable for this
+									&lt;product-id&gt; and &lt;baseline-type&gt;.
+									&lt;valueN&gt; is the substitution value to be given to this attribute.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="requestIds" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									/CHANGE_DOC_IDS=(&lt;request1&gt;,&lt;request2&gt;,..)
+									&lt;requestN&gt; identifies a request to which the new baseline is to be related InResponseTo.
+									If the template specified is a request template, the above request
+									identification will be overridden to specify the list of parent
+									requests that will be used for the CBL command.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="startingBaselineSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/BASELINE
+									If you are creating a new baseline via a change document baseline template, this
+									option creates a reference, or starting point, to which change documents identified by
+									a template can be applied.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="recursive" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/CANCEL_TRAVERSE halts the traversal of dependent requests. By default, requests
+									that are related as dependent will be processed by the CBL command.
+									If /SCOPE=WORKSET is specified, this qualifier controls whether child collections are
+									baselined. The default is /NOCANCEL_TRAVERSE.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="createProjectBaselineResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="baselineSpec" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="baselineURL" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="createDesignPartBaseline">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to create Baseline (CBL command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="baselineSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;baseline-spec&gt; comprises: &lt;product-id&gt;:&lt;baseline-id&gt;
+									&lt;baseline-id&gt; is the identity to be given to the baseline.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="parentPartSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/PART=&lt;part-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;part-id&gt;.&lt;variant&gt;;&lt;pcs&gt;
+									&lt;variant&gt; may be omitted if only one exists.
+									&lt;pcs&gt; is ignored; the current PCS is always used.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="parentPartLevel" type="xsd:int">
+							<annotation>
+								<documentation>
+									/LEVEL=&lt;integer&gt;
+									Optionally, you may elect to restrict the baseline to a given number of levels in the
+									design tree structure.
+									The default of 0 (zero) signifies all levels below the design part selected by /PART. For
+									example, 1 signifies that items related to the selected design part only will be processed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="type" type="xsd:string">
+							<annotation>
+								<documentation>
+									/TYPE=&lt;baseline-type&gt;
+									Specifies the type of baseline being created.
+									If omitted, the default type is RELEASE if a &lt;template-id&gt; has been specified. 
+									(If /TYPE is not specified, then by default, a design baseline is created, which is 
+									simply a snapshot of the current stage of product development, and is not therefore 
+									expected to need an approval lifecycle.)
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="templateId" type="xsd:string">
+							<annotation>
+								<documentation>
+									/TEMPLATE=&lt;template-id&gt;
+									This is the identity of the item or request baseline-template. (The latter type of
+									template was introduced in the Dimensions release 9.1, see the sub-section Request
+									Baseline Templates below for more details.)
+									This must be:
+									- specified when creating a release-baseline
+									- omitted when creating a design baseline.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt;
+									comprises: &lt;product-id&gt;:&lt;project-id&gt;
+									and is optional. If specified, only the items in the project are considered for
+									baselining; otherwise, only the items in the user's current project are considered. 
+									See also, Dimensions LCK command (on page 202) concerning comment about locking the
+									project when baselining.
+									If /SCOPE=WORKSET is specified, this qualifier specifies the project to be baselined,
+									not the project to be used to constrain part-based revision selection.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="attributes" type="basic:AttributeArray">
+							<annotation>
+								<documentation>
+									/ATTRIBUTES=(&lt;attr1&gt;=&lt;value1&gt;,&lt;attr2&gt;=&lt;value2&gt;,..)
+									&lt;attrN&gt; is the Variable Name defined for one of the user-defined attributes
+									for baselines, which has also been declared as usable for this
+									&lt;product-id&gt; and &lt;baseline-type&gt;.
+									&lt;valueN&gt; is the substitution value to be given to this attribute.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="requestIds" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									/CHANGE_DOC_IDS=(&lt;request1&gt;,&lt;request2&gt;,..)
+									&lt;requestN&gt; identifies a request to which the new baseline is to be related InResponseTo.
+									If the template specified is a request template, the above request
+									identification will be overridden to specify the list of parent
+									requests that will be used for the CBL command.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="recursive" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/CANCEL_TRAVERSE halts the traversal of dependent requests. By default, requests
+									that are related as dependent will be processed by the CBL command.
+									If /SCOPE=WORKSET is specified, this qualifier controls whether child collections are
+									baselined. The default is /NOCANCEL_TRAVERSE.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="includeInfo" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/INCLUDE_INFO or /NOINCLUDE_INFO
+									Optionally allow the inclusion of items related to requests via an Info relationship. By
+									default, only items that are related to requests via an InResponseTo relationship will be included.
+									If /SCOPE=WORKSET is specified, this qualifier controls whether child collections with
+									INFO relationships are baselined. A child is considered to have an INFO relationship if
+									the relationship does not specify a relative location.
+									The default is /NOINCLUDE_INFO.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="includeClosed" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									[/[NO]INCLUDE_CLOSED]
+									Include closed requests when processing requests for request baselines. The default
+									is /NOINCLUDE_CLOSED-do not include requests.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="requirementIds" type="basic:RequirementSpecArray">
+							<annotation>
+								<documentation>
+									/REQUIREMENT_IDS=(&lt;requirement_spec1&gt;{container_name}), &lt;requirement_spec2&gt;{container_name},...).
+									Optionally specifies a comma separate list of Dimensions RM requirements, where: 
+									Each &lt;requirement_spec&gt; comprises: &lt;class_name&gt;.&lt;puid&gt;;objId
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="createDesignPartBaselineResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="baselineSpec" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="baselineURL" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="createRevisedBaseline">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to create Revised Baseline (CRB command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="newBaselineSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;new-baseline-spec&gt; comprises: &lt;product-id&gt;:&lt;baseline-id&gt;
+									&lt;baseline-id&gt; is the identity to be given to the revised baseline being created.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="existingBaselineSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/BASELINE1=&lt;existing-baseline-spec&gt; comprises: &lt;product-id&gt;:&lt;baseline-id&gt;
+									&lt;product-id&gt; must be the same as that for &lt;new-baseline-spec&gt;.
+									&lt;baseline-id&gt; is the identity of the existing release baseline to be used to create the revised baseline.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="type" type="xsd:string">
+							<annotation>
+								<documentation>
+									[/TYPE=&lt;baseline-type&gt;]
+									Specifies the type of the revised baseline being created.
+									If omitted, the type will be the same as that of &lt;existing-baseline-spec&gt;.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="updateRequestIds" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									/UPDATE_CHANGE_DOC_IDS=(&lt;ucd1&gt;,..)
+									Identifies one or more request trees (see Description below) within which there are
+									item revisions related in-Response-to. Each such revision replaces the revision of
+									the same item which was previously in the baseline. If there was no such item already
+									in the baseline, then the in-response-to revision is now added, provided that it is a
+									relevant item (i.e. falls within the scope of the baseline).
+
+									When multiple revisions of the same item are in-Response-to one or more
+									requests, the latest revision by pedigree will be selected. If two or more item
+									revisions are on different branches, CRB will issue a warning and continue processing
+									without changing the revision of that item in the baseline.
+
+									NOTE For those requests that result in an item revision being added to the revised
+									baseline, an in-Response-to relationship will also be automatically created
+									between that baseline and the appropriate request.
+									
+									These relationships, however, will only be created if that request has actually been
+									used to revise the baseline. For example, if two requests with exactly the same
+									relationships are used to revise the baseline, then only the one which is actually used
+									by CRB to generate the new baseline will be related.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="removeRequestIds" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									/REMOVE_CHANGE_DOC_IDS=(&lt;rcd1&gt;,..)
+									Identifies one or more request trees (see Description below) within which there are
+									item revisions related as Affected. Each such revision, if it is found in the revised
+									baseline, it is deleted from it. Although each of the above qualifiers /UPDATE and 
+									/REMOVE is optional, at least one of them must be specified.
+
+									NOTE: For those requests that result in an item revision being removed from the
+									revised baseline, an Affected relationship will automatically be created between
+									that baseline and the appropriate request.
+
+									These relationships, however, will only be created if that request has actually been
+									used to revise the baseline. For example, if two requests with exactly the same
+									relationships are used to revise the baseline, then only the one which is actually used
+									by CRB to generate the new baseline will be related.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="updateRequirementSpecs" type="basic:RequirementSpecArray">
+							<annotation>
+								<documentation>
+									[/UPDATE_REQUIREMENT_IDS=(&lt;requirement_spec1&gt;{container_name}), &lt;requirement_spec2&gt;{container_name},...)]
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="removeRequirementSpecs" type="basic:RequirementSpecArray">
+							<annotation>
+								<documentation>
+									[/REMOVE_REQUIREMENT_IDS=(&lt;requirement1&gt;,&lt;requirement2&gt;,...)]
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises: &lt;product-id&gt;:&lt;project-id&gt;
+									This optionally specifies the project to be used for this command: failing this, the
+									user's current project will be taken. When an item has been selected for addition to
+									the baseline, the project file name will be taken from this project if another revision is
+									not already in the project.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="attributes" type="basic:AttributeArray">
+							<annotation>
+								<documentation>
+									/ATTRIBUTES=(&lt;attr1&gt;=&lt;value1&gt;,&lt;attr2&gt;=&lt;value2&gt;,..)
+									sets values for one of more attributes of the new baseline, where each &lt;attrN&gt; is the
+									Variable Name defined for one of the user-defined attributes for baselines, which has
+									also been declared as usable for this &lt;product-id&gt; and &lt;baseline-type&gt;, and
+									&lt;valueN&gt; is the substitution value to be given to this attribute.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="recursive" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/CANCEL_TRAVERSE
+									Indicates that, in the above processing for /UPDATE and
+									/REMOVE, traversal of tree structures is not to be performed, and that only the
+									requests cited in the lists are to be inspected for item revisions that have been
+									related, respectively, in-Response-to and as Affected.
+									If omitted, the processing is of tree-structures as mentioned above (and explained below).
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="createRevisedBaselineResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="baselineSpec" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="baselineURL" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="deployBaseline">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to deploy Baseline (DPB command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="baselineSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;baseline-spec&gt; Baseline specification.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;project-spec&gt;
+									Specifies the root project to be used for this command. If the /WORKSET qualifier is
+									omitted, the DPB command uses the current project.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="stage" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;new-stage&gt;
+									Specifies the target stage. This must be a stage from the global stage lifecycle, and
+									there must be a transition from the current stage to the new stage in the stage
+									lifecycle in order for the DPB command to succeed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;comment&gt; 
+									Textual comment.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="deployBaselineResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="buildBaseline">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to build Baseline (BLDB command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="baselineSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;baseline-spec&gt; Specifies the baseline to be built.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="areaName" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;area-name&gt;
+									Specifies the Dimensions area to be used for the build. If this is not specified, all areas
+									associated with the build configuration or configurations are used.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="batchMode" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/BATCH
+									Specifies that the build is to be run in batch mode (the command does not wait for the
+									build to finish).
+									
+									Default: no batch.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="buildClean" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/BUILD_CLEAN
+									Specifies that the area is to be cleaned of targets before the build process begins.
+									Default: no clean.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="buildConfigurationName" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;build-configuration-name&gt;
+									Specifies the build configuration. If this is not specified, all build configurations
+									associated with the Dimensions project are used.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="buildOptions" type="basic:BuildOptionArray">
+							<annotation>
+								<documentation>
+									/BUILD_OPTIONS=(&lt;opt1&gt;=&lt;value1&gt;,&lt;opt2&gt;=&lt;value2&gt;,..)
+									Specifies any build options.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="capture" type="xsd:boolean">
+							<annotation>
+								<documentation>
+								Specifies whether built targets are to be collected. It is not possible to collect default
+								targets when building at the DEVELOPMENT stage.
+								
+								Default: no capture.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="requestIds" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+								/CHANGE_DOC_IDS=(&lt;request1&gt;,&lt;request2&gt;,..)
+								
+								&lt;requestN&gt; identifies a request to which the new items created from the built
+								final targets are to be related in-Response-to if required by
+								change management rules.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="targetNames" type="basic:BuildTargetNameArray">
+							<annotation>
+								<documentation>
+								Specifies the list of targets to be built. If this is omitted, all targets for the project are
+								built.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="touch" type="xsd:boolean">
+							<annotation>
+								<documentation>
+								Apply system date/time to downloaded files.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="buildBaselineResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResultArray"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="promoteBaselines">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to promote Baselines (PMBL command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="baselines" type="basic:BaselineSpecArray">
+							<annotation>
+								<documentation>
+									Names of baselines that will be promoted. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the baseline(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the promotion operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="stage" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;new-stage&gt;
+									Specifies the target stage to promote the object to. 
+									This must be a stage from the global stage lifecycle, and there must be a transition
+									from the current stage to the new stage in the stage lifecycle in order for the command to succeed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="deploy" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/NODEPLOY
+									Cannot be combined with AREA_LIST and indicates that the AREA_LIST is not included on purpose as no deployment is to occur.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="promoteBaselinesResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="demoteBaselines">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to demote Baselines (PMBL command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="baselines" type="basic:BaselineSpecArray">
+							<annotation>
+								<documentation>
+									Names of baselines that will be demoted. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the baseline(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the demotion operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="stage" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;new-stage&gt;
+									Specifies the target stage to promote the object to. 
+									This must be a stage from the global stage lifecycle, and there must be a transition
+									from the current stage to the new stage in the stage lifecycle in order for the command to succeed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="deploy" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/NODEPLOY
+									Cannot be combined with AREA_LIST and indicates that the AREA_LIST is not included on purpose as no deployment is to occur.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="demoteBaselinesResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitDeployBaselines">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to Submit Deploy Baselines (SDPBL command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="baselines" type="basic:BaselineSpecArray">
+							<annotation>
+								<documentation>
+									Names of baselines that will be submitted for deploy. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the baseline(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the submit deploy operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="false" maxOccurs="1" minOccurs="0" name="returnSubmittedDeploymentJobs" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									When true, returns submitted deployment jobs along with the result.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitDeployBaselinesResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+						<element maxOccurs="1" minOccurs="0" name="deploymentJobs" type="basic:SubmittedDeploymentJobArray">
+							<annotation>
+								<documentation>
+									List of deployment job attributes in the form of deployment job UID/job type pairs. 
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitRollbackBaselines">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to submit rollback Baselines (SRBL command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="baselines" type="basic:BaselineSpecArray">
+							<annotation>
+								<documentation>
+									Names of baselines that will be submitted for rollback. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the requests(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the submitting rollback operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitRollbackBaselinesResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<!-- ============================================================================== -->
+			<!--  Request related function parameters                                           -->
+			<!-- ============================================================================== -->
+
+			<element name="createRequest">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to create a Change Request.</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>This structure specifies the connection details for the Dimensions server.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="request" type="requests:NewRequest">
+							<annotation>
+								<documentation>The request object to be created.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="draft" type="xsd:boolean">
+							<annotation>
+								<documentation>
+								This flag indicates if the Change Request is
+								to be created as a draft. The default is
+								that the Change Request is not created as a draft.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="createRequestResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="requestId" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="requestURL" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="updateRequest">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="unbounded" minOccurs="1" name="request" type="requests:Request"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="updateRequestResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="0" name="requestId" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="getRequests">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="unbounded" minOccurs="1" name="requestId" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="0" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;project-spec&gt;
+									Comprises: &lt;product-id&gt;:&lt;project-id&gt;
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="getRequestsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="0" name="request" type="requests:Request"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="actionRequest">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="1" minOccurs="1" name="requestId" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="0" name="status" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="0" name="actionCheck" type="xsd:boolean"/>
+						<element maxOccurs="1" minOccurs="0" name="closureCheck" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="actionRequestResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="deployRequest">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="1" minOccurs="1" name="requestId" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="0" name="projectSpec" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="stage" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="comment" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="traverseChildren" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="deployRequestResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="delegateRequest">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="1" minOccurs="1" name="requestId" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="userNames" type="basic:UserNameArray"/>
+						<element maxOccurs="1" minOccurs="1" name="role" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="capability" type="basic:UserRoleCapability"/>
+						<element maxOccurs="1" minOccurs="1" name="mode" type="basic:DelegateRequestMode"/>
+						<element maxOccurs="1" minOccurs="1" name="delegateItems" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="delegateRequestResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="delegateRequestForReplication">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="1" minOccurs="1" name="requestId" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="site" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="mode" type="basic:DelegateRequestMode"/>
+						<element maxOccurs="1" minOccurs="1" name="delegateItems" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="delegateRequestForReplicationResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="xsd:boolean"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="relateRequestToRequests">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to relate Request to another Request(s) (RCCD command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="requestId" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;request-id&gt;
+									This is the identity of the request to be the parent in the relationship to be created.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="childRequestIds" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									/CHANGE_DOC_IDS=(&lt;request1&gt;,&lt;request2&gt;,:)
+									Specifies the identities of one or more requests to be children in the relationship to be created.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="relationshipType" type="xsd:string">
+							<annotation>
+								<documentation>
+									/RELATIONSHIP=&lt;relname&gt;
+									Specifies the relationship class as DEPENDENT or INFO, or as the name of one of the
+									subclasses of relationship defined as equivalent to either of these.
+
+									/DEPENDENT or /INFO
+									This is equivalent to specifying either of these as settings of the /RELATIONSHIP qualifier.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="continueOnError" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									if the value of CONTINUE_ON_ERROR is false, if one of the commands fails the WS doesn't continue 
+									with the execution of the subsequent commands and returns an error, 
+
+									if the value of CONTINUE_ON_ERROR is true, if one of the commands fails the WS continues 
+									to try to execute the subsequent commands and returns errors for each of the failing commands.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="relateRequestToRequestsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="results" type="impl:DimensionsResultArray"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="unrelateRequestFromRequests">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to unrelate Request from another Request(s) (XCCD command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="requestId" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;request-id&gt;
+									This is the identity of the request which is the parent in the relationship to be removed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="childRequestIds" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									/CHANGE_DOC_IDS=(&lt;request1&gt;,&lt;request2&gt;,..)
+									Specifies the identities of one or more requests to be children in the relationship to be created.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="relationshipType" type="xsd:string">
+							<annotation>
+								<documentation>
+									/RELATIONSHIP=&lt;relname&gt;
+									Specifies the relationship class as DEPENDENT or INFO, or as the name of one of the
+									subclasses of relationship defined as equivalent to either of these.
+
+									/DEPENDENT or /INFO
+									This is equivalent to specifying either of these as settings of the /RELATIONSHIP qualifier.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="continueOnError" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									if the value of CONTINUE_ON_ERROR is false, if one of the commands fails the WS doesn't continue 
+									with the execution of the subsequent commands and returns an error, 
+
+									if the value of CONTINUE_ON_ERROR is true, if one of the commands fails the WS continues 
+									to try to execute the subsequent commands and returns errors for each of the failing commands.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="unrelateRequestFromRequestsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="results" type="impl:DimensionsResultArray"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="promoteRequests">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to promote Requests (PMRQ command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="requests" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									Names of requests that will be promoted. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the requests(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the promotion operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="stage" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;new-stage&gt;
+									Specifies the target stage to promote the object to. 
+									This must be a stage from the global stage lifecycle, and there must be a transition
+									from the current stage to the new stage in the stage lifecycle in order for the command to succeed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="recursive" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/CANCEL_TRAVERSE halts the traversal of dependent requests. 
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="deploy" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/NODEPLOY
+									Cannot be combined with AREA_LIST and indicates that the AREA_LIST is not included on purpose as no deployment is to occur.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="promoteRequestsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>		
+			
+			<element name="demoteRequests">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to demote Requests (DMRQ command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="requests" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									Names of requests that will be demoted. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the requests(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the promotion operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="stage" type="xsd:string">
+							<annotation>
+								<documentation>
+									&lt;new-stage&gt;
+									Specifies the target stage to promote the object to. 
+									This must be a stage from the global stage lifecycle, and there must be a transition
+									from the current stage to the new stage in the stage lifecycle in order for the command to succeed.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="recursive" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/CANCEL_TRAVERSE halts the traversal of dependent requests. 
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="deploy" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/NODEPLOY
+									Cannot be combined with AREA_LIST and indicates that the AREA_LIST is not included on purpose as no deployment is to occur.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="demoteRequestsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>	
+			
+			<element name="submitDeployRequests">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to Submit Deploy Requests (SDPRQ command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="requests" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									Names of requests that will be submitted for deploy. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the requests(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the submit deploy operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="recursive" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/CANCEL_TRAVERSE halts the traversal of dependent requests. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="false" maxOccurs="1" minOccurs="0" name="returnSubmittedDeploymentJobs" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									When true, returns submitted deployment jobs along with the result.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitDeployRequestsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+						<element maxOccurs="1" minOccurs="0" name="deploymentJobs" type="basic:SubmittedDeploymentJobArray">
+							<annotation>
+								<documentation>
+									List of deployment job attributes in the form of deployment job UID/job type pairs. 
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitRollbackRequests">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to submit rollback Requests (SRRQ command)</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>
+									Specifies the connection details for the Dimensions server.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="requests" type="basic:RequestIdArray">
+							<annotation>
+								<documentation>
+									Names of requests that will be submitted for rollback. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="projectSpec" type="xsd:string">
+							<annotation>
+								<documentation>
+									/WORKSET=&lt;project-spec&gt; comprises:
+									&lt;product-id&gt;:&lt;project-id&gt;
+									It is the name of the project the requests(s) are in.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="areas" type="basic:AreaArray">
+							<annotation>
+								<documentation>
+									A list of target deployment areas to deploy to.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="comment" type="xsd:string">
+							<annotation>
+								<documentation>
+									/COMMENT=&lt;comment text&gt;
+									comment text associated with the submitting rollback operation.
+								</documentation>
+							</annotation>
+						</element>
+						<element default="true" maxOccurs="1" minOccurs="0" name="recursive" type="xsd:boolean">
+							<annotation>
+								<documentation>
+									/CANCEL_TRAVERSE halts the traversal of dependent requests. 
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="deployStartTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>
+									/DEPLOY_START_TIME
+									Start time for the file deployment operation to begin.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			
+			<element name="submitRollbackRequestsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="getRequestDescription">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="1" minOccurs="1" name="requestId" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="getRequestDescriptionResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="description" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="updateRequestDescription">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails"/>
+						<element maxOccurs="1" minOccurs="1" name="requestId" type="xsd:string"/>
+						<element maxOccurs="1" minOccurs="1" name="description" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="updateRequestDescriptionResponse">
+				<complexType>
+					<sequence>
+						<!-- No response required -->
+					</sequence>
+				</complexType>
+			</element>
+			
+			<!-- ============================================================================== -->
+			<!--  Job related function parameters                                           -->
+			<!-- ============================================================================== -->
+
+			<element name="createScheduleJob">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to create a Schedule Job (CSJ).</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>This structure specifies the connection details for the Dimensions server.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="1" name="scheduleJob" type="basic:NewScheduleJob">
+							<annotation>
+								<documentation>The request object to be created.</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="createScheduleJobResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResult"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="listScheduleJobs">
+				<complexType>
+					<annotation>
+						<documentation>The parameters required to get a list of Schedule Jobs (LSJ).</documentation>
+					</annotation>
+					<sequence>
+						<element maxOccurs="1" minOccurs="0" name="connectionDetails" type="basic:ConnectionDetails">
+							<annotation>
+								<documentation>This structure specifies the connection details for the Dimensions server.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="jobName" type="xsd:string">
+							<annotation>
+								<documentation>Specifies the job name.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="fromTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>Displays schedule jobs whose start time is greater than, or equal to, the value that is specified.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="toTime" type="xsd:dateTime">
+							<annotation>
+								<documentation>Displays schedule jobs whose start time is less than, or equal to, the value that is specified.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="status" type="basic:JobStatusArray">
+							<annotation>
+								<documentation>Filters job statuses and only displays the statuses that are specified. Can be one or more of the following: Active, Inactive, Running, Cancelling.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="originator" type="xsd:string">
+							<annotation>
+								<documentation>Displays jobs created by the user.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="sorting" type="basic:JobSortingArray">
+							<annotation>
+								<documentation>
+								Specifies the way that job lists are ordered, can be one or more of the following values:
+									NAME: jobs are ordered by name (job-id).
+									DATE: jobs are ordered by scheduled date/time (START_TIME).
+									STATUS: jobs are ordered by current status (JOB_STATUS).
+									To use a combination of values, separate with commas.
+									You can also optionally specify keywords to sort a list in ascending (ASC) or
+									descending (DESC) order. The default is ASC.
+								</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="history" type="xsd:boolean">
+							<annotation>
+								<documentation>Displays the execution history of jobs.</documentation>
+							</annotation>
+						</element>
+						<element maxOccurs="1" minOccurs="0" name="commands" type="xsd:boolean">
+							<annotation>
+								<documentation>Displays all the commands related to the scheduled job(s).</documentation>
+							</annotation>
+						</element>
+						
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="listScheduleJobsResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="0" name="scheduleJob" type="basic:ScheduleJob"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<!-- ============================================================================== -->
+			<!--  Faults                                                                        -->
+			<!-- ============================================================================== -->
+
+			<element name="DimensionsFault">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="message" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+
+			<element name="DimensionsBatchFault">
+				<complexType>
+					<sequence>
+						<element maxOccurs="1" minOccurs="1" name="result" type="impl:DimensionsResultArray"/>
+					</sequence>
+				</complexType>
+			</element>
+
+		</schema>
+  </wsdl:types>
+  <wsdl:message name="CreateDesignPartBaselineResponse">
+    <wsdl:part name="parameters" element="impl:createDesignPartBaselineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeployBaselineRequest">
+    <wsdl:part name="parameters" element="impl:deployBaseline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CheckOutItemResponse">
+    <wsdl:part name="parameters" element="impl:checkOutItemResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DimensionsFaultMessage">
+    <wsdl:part name="fault" element="impl:DimensionsFault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListProjectsResponse">
+    <wsdl:part name="parameters" element="impl:listProjectsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PromoteRequestsResponse">
+    <wsdl:part name="parameters" element="impl:promoteRequestsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PromoteItemsRequest">
+    <wsdl:part name="parameters" element="impl:promoteItems">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateDesignPartBaselineRequest">
+    <wsdl:part name="parameters" element="impl:createDesignPartBaseline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DemoteBaselinesResponse">
+    <wsdl:part name="parameters" element="impl:demoteBaselinesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UnrelateRequestFromRequestsResponse">
+    <wsdl:part name="parameters" element="impl:unrelateRequestFromRequestsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateScheduleJobResponse">
+    <wsdl:part name="parameters" element="impl:createScheduleJobResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateRequestRequest">
+    <wsdl:part name="parameters" element="impl:updateRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListProjectsRequest">
+    <wsdl:part name="parameters" element="impl:listProjects">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateRevisedBaselineRequest">
+    <wsdl:part name="parameters" element="impl:createRevisedBaseline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateProjectRequest">
+    <wsdl:part name="parameters" element="impl:createProject">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateRequestRequest">
+    <wsdl:part name="parameters" element="impl:createRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DemoteItemsRequest">
+    <wsdl:part name="parameters" element="impl:demoteItems">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListProjectItemsRequest">
+    <wsdl:part name="parameters" element="impl:listProjectItems">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="MoveItemToPartResponse">
+    <wsdl:part name="parameters" element="impl:moveItemToPartResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CheckOutItemRequest">
+    <wsdl:part name="parameters" element="impl:checkOutItem">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ActionRequestResponse">
+    <wsdl:part name="parameters" element="impl:actionRequestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateScheduleJobRequest">
+    <wsdl:part name="parameters" element="impl:createScheduleJob">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitDeployRequestsRequest">
+    <wsdl:part name="parameters" element="impl:submitDeployRequests">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateProjectBaselineRequest">
+    <wsdl:part name="parameters" element="impl:createProjectBaseline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateDesignPartResponse">
+    <wsdl:part name="parameters" element="impl:createDesignPartResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DemoteItemsResponse">
+    <wsdl:part name="parameters" element="impl:demoteItemsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListScheduleJobsRequest">
+    <wsdl:part name="parameters" element="impl:listScheduleJobs">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetItemsRequest">
+    <wsdl:part name="parameters" element="impl:getItems">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetVersionResponse">
+    <wsdl:part name="parameters" element="impl:getVersionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PromoteItemsResponse">
+    <wsdl:part name="parameters" element="impl:promoteItemsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RunCommandRequest">
+    <wsdl:part name="parameters" element="impl:runCommand">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitRollbackBaselinesResponse">
+    <wsdl:part name="parameters" element="impl:submitRollbackBaselinesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="BuildBaselineRequest">
+    <wsdl:part name="parameters" element="impl:buildBaseline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateRequestDescriptionResponse">
+    <wsdl:part name="parameters" element="impl:updateRequestDescriptionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetRequestsResponse">
+    <wsdl:part name="parameters" element="impl:getRequestsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="BuildBaselineResponse">
+    <wsdl:part name="parameters" element="impl:buildBaselineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetRequestsRequest">
+    <wsdl:part name="parameters" element="impl:getRequests">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DimensionsBatchFaultMessage">
+    <wsdl:part name="fault" element="impl:DimensionsBatchFault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitDeployItemsResponse">
+    <wsdl:part name="parameters" element="impl:submitDeployItemsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DelegateRequestResponse">
+    <wsdl:part name="parameters" element="impl:delegateRequestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitDeployItemsRequest">
+    <wsdl:part name="parameters" element="impl:submitDeployItems">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetRequestDescriptionRequest">
+    <wsdl:part name="parameters" element="impl:getRequestDescription">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="MoveItemToPartRequest">
+    <wsdl:part name="parameters" element="impl:moveItemToPart">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateRequestResponse">
+    <wsdl:part name="outputParams" element="impl:updateRequestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitRollbackItemsRequest">
+    <wsdl:part name="parameters" element="impl:submitRollbackItems">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeployRequestRequest">
+    <wsdl:part name="parameters" element="impl:deployRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UnrelateItemsFromPartsResponse">
+    <wsdl:part name="parameters" element="impl:unrelateItemsFromPartsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitDeployBaselinesRequest">
+    <wsdl:part name="parameters" element="impl:submitDeployBaselines">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitRollbackBaselinesRequest">
+    <wsdl:part name="parameters" element="impl:submitRollbackBaselines">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateDesignPartRequest">
+    <wsdl:part name="parameters" element="impl:createDesignPart">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CheckInItemResponse">
+    <wsdl:part name="parameters" element="impl:checkInItemResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DelegateRequestForReplicationResponse">
+    <wsdl:part name="parameters" element="impl:delegateRequestForReplicationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RunCommandResponse">
+    <wsdl:part name="parameters" element="impl:runCommandResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DelegateRequestForReplicationRequest">
+    <wsdl:part name="parameters" element="impl:delegateRequestForReplication">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeployRequestResponse">
+    <wsdl:part name="parameters" element="impl:deployRequestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateProjectBaselineResponse">
+    <wsdl:part name="parameters" element="impl:createProjectBaselineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListScheduleJobsResponse">
+    <wsdl:part name="parameters" element="impl:listScheduleJobsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListProjectRequestsResponse">
+    <wsdl:part name="parameters" element="impl:listProjectRequestsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetRequestDescriptionResponse">
+    <wsdl:part name="parameters" element="impl:getRequestDescriptionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RelateItemsToPartsRequest">
+    <wsdl:part name="parameters" element="impl:relateItemsToParts">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DemoteRequestsRequest">
+    <wsdl:part name="parameters" element="impl:demoteRequests">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListProjectItemsResponse">
+    <wsdl:part name="parameters" element="impl:listProjectItemsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateProjectResponse">
+    <wsdl:part name="parameters" element="impl:createProjectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DemoteBaselinesRequest">
+    <wsdl:part name="parameters" element="impl:demoteBaselines">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="BuildProjectResponse">
+    <wsdl:part name="parameters" element="impl:buildProjectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="BuildProjectRequest">
+    <wsdl:part name="parameters" element="impl:buildProject">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetVersionRequest">
+    <wsdl:part name="parameters" element="impl:getVersion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PromoteRequestsRequest">
+    <wsdl:part name="parameters" element="impl:promoteRequests">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitRollbackRequestsResponse">
+    <wsdl:part name="parameters" element="impl:submitRollbackRequestsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RelateItemsToPartsResponse">
+    <wsdl:part name="parameters" element="impl:relateItemsToPartsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UnrelateRequestFromRequestsRequest">
+    <wsdl:part name="parameters" element="impl:unrelateRequestFromRequests">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateRevisedBaselineResponse">
+    <wsdl:part name="parameters" element="impl:createRevisedBaselineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PromoteBaselinesRequest">
+    <wsdl:part name="parameters" element="impl:promoteBaselines">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RelateRequestToRequestsRequest">
+    <wsdl:part name="parameters" element="impl:relateRequestToRequests">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeployBaselineResponse">
+    <wsdl:part name="parameters" element="impl:deployBaselineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitRollbackItemsResponse">
+    <wsdl:part name="parameters" element="impl:submitRollbackItemsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitRollbackRequestsRequest">
+    <wsdl:part name="parameters" element="impl:submitRollbackRequests">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitDeployRequestsResponse">
+    <wsdl:part name="parameters" element="impl:submitDeployRequestsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetItemsResponse">
+    <wsdl:part name="parameters" element="impl:getItemsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DemoteRequestsResponse">
+    <wsdl:part name="parameters" element="impl:demoteRequestsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RelateRequestToRequestsResponse">
+    <wsdl:part name="parameters" element="impl:relateRequestToRequestsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ActionRequestRequest">
+    <wsdl:part name="parameters" element="impl:actionRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UnrelateItemsFromPartsRequest">
+    <wsdl:part name="parameters" element="impl:unrelateItemsFromParts">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SubmitDeployBaselinesResponse">
+    <wsdl:part name="parameters" element="impl:submitDeployBaselinesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListProjectRequestsRequest">
+    <wsdl:part name="parameters" element="impl:listProjectRequests">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateRequestDescriptionRequest">
+    <wsdl:part name="parameters" element="impl:updateRequestDescription">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DelegateRequestRequest">
+    <wsdl:part name="parameters" element="impl:delegateRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateRequestResponse">
+    <wsdl:part name="parameters" element="impl:createRequestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CheckInItemRequest">
+    <wsdl:part name="parameters" element="impl:checkInItem">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PromoteBaselinesResponse">
+    <wsdl:part name="parameters" element="impl:promoteBaselinesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="dmwebservicesPortType">
+    <wsdl:operation name="getVersion">
+<wsdl:documentation>Method to get version information of CM</wsdl:documentation>
+      <wsdl:input name="getVersionRequest" message="impl:GetVersionRequest">
+    </wsdl:input>
+      <wsdl:output name="getVersionResponse" message="impl:GetVersionResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="runCommand">
+<wsdl:documentation>Method to invoke any CM command</wsdl:documentation>
+      <wsdl:input name="runCommandRequest" message="impl:RunCommandRequest">
+    </wsdl:input>
+      <wsdl:output name="runCommandResponse" message="impl:RunCommandResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createProject">
+<wsdl:documentation>Method to create a new Project in Dimensions (DWS command)</wsdl:documentation>
+      <wsdl:input name="createProjectRequest" message="impl:CreateProjectRequest">
+    </wsdl:input>
+      <wsdl:output name="createProjectResponse" message="impl:CreateProjectResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listProjectItems">
+<wsdl:documentation>Method to list Items within Project</wsdl:documentation>
+      <wsdl:input name="listProjectItemsRequest" message="impl:ListProjectItemsRequest">
+    </wsdl:input>
+      <wsdl:output name="listProjectItemsResponse" message="impl:ListProjectItemsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listProjectRequests">
+<wsdl:documentation>Method to list Project Requests</wsdl:documentation>
+      <wsdl:input name="listProjectRequestsRequest" message="impl:ListProjectRequestsRequest">
+    </wsdl:input>
+      <wsdl:output name="listProjectRequestsResponse" message="impl:ListProjectRequestsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="buildProject">
+<wsdl:documentation>Method to build project (BLD command)</wsdl:documentation>
+      <wsdl:input name="buildProjectRequest" message="impl:BuildProjectRequest">
+    </wsdl:input>
+      <wsdl:output name="buildProjectResponse" message="impl:BuildProjectResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listProjects">
+<wsdl:documentation>Method to get a list of Projects/Streams in Dimensions (LWS command)</wsdl:documentation>
+      <wsdl:input name="listProjectsRequest" message="impl:ListProjectsRequest">
+    </wsdl:input>
+      <wsdl:output name="listProjectsResponse" message="impl:ListProjectsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createDesignPart">
+<wsdl:documentation>Method to create a new Design Part in Dimensions (CP command)</wsdl:documentation>
+      <wsdl:input name="createDesignPartRequest" message="impl:CreateDesignPartRequest">
+    </wsdl:input>
+      <wsdl:output name="createDesignPartResponse" message="impl:CreateDesignPartResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getItems">
+<wsdl:documentation>Method to get Project or Baseline Items (DOWNLOAD command)</wsdl:documentation>
+      <wsdl:input name="getItemsRequest" message="impl:GetItemsRequest">
+    </wsdl:input>
+      <wsdl:output name="getItemsResponse" message="impl:GetItemsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="checkOutItem">
+<wsdl:documentation>Method to check-out Item in Dimensions (EI command)</wsdl:documentation>
+      <wsdl:input name="checkOutItemRequest" message="impl:CheckOutItemRequest">
+    </wsdl:input>
+      <wsdl:output name="checkOutItemResponse" message="impl:CheckOutItemResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="checkInItem">
+<wsdl:documentation>Method to check-in Item in Dimensions (RI command)</wsdl:documentation>
+      <wsdl:input name="checkInItemRequest" message="impl:CheckInItemRequest">
+    </wsdl:input>
+      <wsdl:output name="checkInItemResponse" message="impl:CheckInItemResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="relateItemsToParts">
+<wsdl:documentation>Method to relate Items to Parts (RIP command)</wsdl:documentation>
+      <wsdl:input name="relateItemsToPartsRequest" message="impl:RelateItemsToPartsRequest">
+    </wsdl:input>
+      <wsdl:output name="relateItemsToPartsResponse" message="impl:RelateItemsToPartsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+      <wsdl:fault name="DimensionsBatchFaultMessage" message="impl:DimensionsBatchFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="moveItemToPart">
+<wsdl:documentation>Method to move Item to Another Part (MIP command)</wsdl:documentation>
+      <wsdl:input name="moveItemToPartRequest" message="impl:MoveItemToPartRequest">
+    </wsdl:input>
+      <wsdl:output name="moveItemToPartResponse" message="impl:MoveItemToPartResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="unrelateItemsFromParts">
+<wsdl:documentation>Method to unrelate Items from Parts (XIP command)</wsdl:documentation>
+      <wsdl:input name="unrelateItemsFromPartsRequest" message="impl:UnrelateItemsFromPartsRequest">
+    </wsdl:input>
+      <wsdl:output name="unrelateItemsFromPartsResponse" message="impl:UnrelateItemsFromPartsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+      <wsdl:fault name="DimensionsBatchFaultMessage" message="impl:DimensionsBatchFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="promoteItems">
+<wsdl:documentation>Method to promote Items (PMI command)</wsdl:documentation>
+      <wsdl:input name="promoteItemsRequest" message="impl:PromoteItemsRequest">
+    </wsdl:input>
+      <wsdl:output name="promoteItemsResponse" message="impl:PromoteItemsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="demoteItems">
+<wsdl:documentation>Method to demote Items (DMI command)</wsdl:documentation>
+      <wsdl:input name="demoteItemsRequest" message="impl:DemoteItemsRequest">
+    </wsdl:input>
+      <wsdl:output name="demoteItemsResponse" message="impl:DemoteItemsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitDeployItems">
+<wsdl:documentation>Method to submit deploy Items (SDPI command)</wsdl:documentation>
+      <wsdl:input name="submitDeployItemsRequest" message="impl:SubmitDeployItemsRequest">
+    </wsdl:input>
+      <wsdl:output name="submitDeployItemsResponse" message="impl:SubmitDeployItemsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitRollbackItems">
+<wsdl:documentation>Method to submit rollback Items (SRI command)</wsdl:documentation>
+      <wsdl:input name="submitRollbackItemsRequest" message="impl:SubmitRollbackItemsRequest">
+    </wsdl:input>
+      <wsdl:output name="submitRollbackItemsResponse" message="impl:SubmitRollbackItemsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createProjectBaseline">
+<wsdl:documentation>Method to create Baseline (CBL command with /SCOPE=WORKSET)</wsdl:documentation>
+      <wsdl:input name="createProjectBaselineRequest" message="impl:CreateProjectBaselineRequest">
+    </wsdl:input>
+      <wsdl:output name="createProjectBaselineResponse" message="impl:CreateProjectBaselineResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createDesignPartBaseline">
+<wsdl:documentation>Method to create Baseline (CBL command with /SCOPE=PART)</wsdl:documentation>
+      <wsdl:input name="createDesignPartBaselineRequest" message="impl:CreateDesignPartBaselineRequest">
+    </wsdl:input>
+      <wsdl:output name="createDesignPartBaselineResponse" message="impl:CreateDesignPartBaselineResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createRevisedBaseline">
+<wsdl:documentation>Method to create Revised Baseline (CRB command)</wsdl:documentation>
+      <wsdl:input name="createRevisedBaselineRequest" message="impl:CreateRevisedBaselineRequest">
+    </wsdl:input>
+      <wsdl:output name="createRevisedBaselineResponse" message="impl:CreateRevisedBaselineResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deployBaseline">
+<wsdl:documentation>Method to deploy Baseline in Dimensions (DPB command).</wsdl:documentation>
+      <wsdl:input name="deployBaselineRequest" message="impl:DeployBaselineRequest">
+    </wsdl:input>
+      <wsdl:output name="deployBaselineResponse" message="impl:DeployBaselineResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="buildBaseline">
+<wsdl:documentation>Method to build baseline (BLDB command)</wsdl:documentation>
+      <wsdl:input name="buildBaselineRequest" message="impl:BuildBaselineRequest">
+    </wsdl:input>
+      <wsdl:output name="buildBaselineResponse" message="impl:BuildBaselineResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="promoteBaselines">
+<wsdl:documentation>Method to promote Baselines (PMBL command)</wsdl:documentation>
+      <wsdl:input name="promoteBaselinesRequest" message="impl:PromoteBaselinesRequest">
+    </wsdl:input>
+      <wsdl:output name="promoteBaselinesResponse" message="impl:PromoteBaselinesResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="demoteBaselines">
+<wsdl:documentation>Method to demote Baselines (DMBL command)</wsdl:documentation>
+      <wsdl:input name="demoteBaselinesRequest" message="impl:DemoteBaselinesRequest">
+    </wsdl:input>
+      <wsdl:output name="demoteBaselinesResponse" message="impl:DemoteBaselinesResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitDeployBaselines">
+<wsdl:documentation>Method to submit deploy Baselines (SDPBL command)</wsdl:documentation>
+      <wsdl:input name="submitDeployBaselinesRequest" message="impl:SubmitDeployBaselinesRequest">
+    </wsdl:input>
+      <wsdl:output name="submitDeployBaselinesResponse" message="impl:SubmitDeployBaselinesResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitRollbackBaselines">
+<wsdl:documentation>Method to submit rollback Baselines (SRBL command)</wsdl:documentation>
+      <wsdl:input name="submitRollbackBaselinesRequest" message="impl:SubmitRollbackBaselinesRequest">
+    </wsdl:input>
+      <wsdl:output name="submitRollbackBaselinesResponse" message="impl:SubmitRollbackBaselinesResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createRequest">
+<wsdl:documentation>Method to create a new Change Request in Dimensions.,</wsdl:documentation>
+      <wsdl:input name="createRequestRequest" message="impl:CreateRequestRequest">
+    </wsdl:input>
+      <wsdl:output name="createRequestResponse" message="impl:CreateRequestResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateRequest">
+<wsdl:documentation>Method to update an existing Change Request in Dimensions.</wsdl:documentation>
+      <wsdl:input name="updateRequestRequest" message="impl:UpdateRequestRequest">
+    </wsdl:input>
+      <wsdl:output name="updateRequestResponse" message="impl:UpdateRequestResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRequests">
+<wsdl:documentation>Method to get details of an existing Change Request in Dimensions.</wsdl:documentation>
+      <wsdl:input name="getRequestsRequest" message="impl:GetRequestsRequest">
+    </wsdl:input>
+      <wsdl:output name="getRequestsResponse" message="impl:GetRequestsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="actionRequest">
+<wsdl:documentation>Method to action an existing Change Request in Dimensions</wsdl:documentation>
+      <wsdl:input name="actionRequestRequest" message="impl:ActionRequestRequest">
+    </wsdl:input>
+      <wsdl:output name="actionRequestResponse" message="impl:ActionRequestResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deployRequest">
+<wsdl:documentation>Method to deploy an existing Change Request in Dimensions</wsdl:documentation>
+      <wsdl:input name="deployRequestRequest" message="impl:DeployRequestRequest">
+    </wsdl:input>
+      <wsdl:output name="deployRequestResponse" message="impl:DeployRequestResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="delegateRequest">
+<wsdl:documentation>Method to delegate an existing Change Request in Dimensions</wsdl:documentation>
+      <wsdl:input name="delegateRequestRequest" message="impl:DelegateRequestRequest">
+    </wsdl:input>
+      <wsdl:output name="delegateRequestResponse" message="impl:DelegateRequestResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="delegateRequestForReplication">
+<wsdl:documentation>Method to delegate an existing Change Request in Dimensions to a replication site rather than a specific user</wsdl:documentation>
+      <wsdl:input name="delegateRequestForReplicationRequest" message="impl:DelegateRequestForReplicationRequest">
+    </wsdl:input>
+      <wsdl:output name="delegateRequestForReplicationResponse" message="impl:DelegateRequestForReplicationResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="relateRequestToRequests">
+<wsdl:documentation>Method to relate Request to another Request (RCCD command)</wsdl:documentation>
+      <wsdl:input name="relateRequestToRequestsRequest" message="impl:RelateRequestToRequestsRequest">
+    </wsdl:input>
+      <wsdl:output name="relateRequestToRequestsResponse" message="impl:RelateRequestToRequestsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+      <wsdl:fault name="DimensionsBatchFaultMessage" message="impl:DimensionsBatchFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="unrelateRequestFromRequests">
+<wsdl:documentation>Method to unrelate Request from another Request (XCCD command)</wsdl:documentation>
+      <wsdl:input name="unrelateRequestFromRequestsRequest" message="impl:UnrelateRequestFromRequestsRequest">
+    </wsdl:input>
+      <wsdl:output name="unrelateRequestFromRequestsResponse" message="impl:UnrelateRequestFromRequestsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+      <wsdl:fault name="DimensionsBatchFaultMessage" message="impl:DimensionsBatchFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="promoteRequests">
+<wsdl:documentation>Method to promote Requests (PMRQ command)</wsdl:documentation>
+      <wsdl:input name="promoteRequestsRequest" message="impl:PromoteRequestsRequest">
+    </wsdl:input>
+      <wsdl:output name="promoteRequestsResponse" message="impl:PromoteRequestsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="demoteRequests">
+<wsdl:documentation>Method to demote Requests (DMRQ command)</wsdl:documentation>
+      <wsdl:input name="demoteRequestsRequest" message="impl:DemoteRequestsRequest">
+    </wsdl:input>
+      <wsdl:output name="demoteRequestsResponse" message="impl:DemoteRequestsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitDeployRequests">
+<wsdl:documentation>Method to submit deploy Requests (SDPRQ command)</wsdl:documentation>
+      <wsdl:input name="submitDeployRequestsRequest" message="impl:SubmitDeployRequestsRequest">
+    </wsdl:input>
+      <wsdl:output name="submitDeployRequestsResponse" message="impl:SubmitDeployRequestsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitRollbackRequests">
+<wsdl:documentation>Method to submit rollback Requests (SRRQ command)</wsdl:documentation>
+      <wsdl:input name="submitRollbackRequestsRequest" message="impl:SubmitRollbackRequestsRequest">
+    </wsdl:input>
+      <wsdl:output name="submitRollbackRequestsResponse" message="impl:SubmitRollbackRequestsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRequestDescription">
+<wsdl:documentation>Method to obtain Request description</wsdl:documentation>
+      <wsdl:input name="getRequestDescriptionRequest" message="impl:GetRequestDescriptionRequest">
+    </wsdl:input>
+      <wsdl:output name="getRequestDescriptionResponse" message="impl:GetRequestDescriptionResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateRequestDescription">
+<wsdl:documentation>Method to update Request description</wsdl:documentation>
+      <wsdl:input name="updateRequestDescriptionRequest" message="impl:UpdateRequestDescriptionRequest">
+    </wsdl:input>
+      <wsdl:output name="updateRequestDescriptionResponse" message="impl:UpdateRequestDescriptionResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createScheduleJob">
+<wsdl:documentation>Method to create a schedule job (CSJ command)</wsdl:documentation>
+      <wsdl:input name="createScheduleJobRequest" message="impl:CreateScheduleJobRequest">
+    </wsdl:input>
+      <wsdl:output name="createScheduleJobResponse" message="impl:CreateScheduleJobResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listScheduleJobs">
+<wsdl:documentation>Method to get a list of Schedule jobs (LSJ command)</wsdl:documentation>
+      <wsdl:input name="listScheduleJobsRequest" message="impl:ListScheduleJobsRequest">
+    </wsdl:input>
+      <wsdl:output name="listScheduleJobsResponse" message="impl:ListScheduleJobsResponse">
+    </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage" message="impl:DimensionsFaultMessage">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="dmwebservicesSoapBinding" type="impl:dmwebservicesPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getVersion">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getVersionRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getVersionResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="runCommand">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="runCommandRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="runCommandResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createProject">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createProjectRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createProjectResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listProjectItems">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="listProjectItemsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listProjectItemsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listProjectRequests">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="listProjectRequestsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listProjectRequestsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="buildProject">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="buildProjectRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="buildProjectResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listProjects">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="listProjectsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listProjectsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createDesignPart">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createDesignPartRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createDesignPartResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getItems">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getItemsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getItemsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="checkOutItem">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="checkOutItemRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="checkOutItemResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="checkInItem">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="checkInItemRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="checkInItemResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="relateItemsToParts">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="relateItemsToPartsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="relateItemsToPartsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DimensionsBatchFaultMessage">
+        <wsdlsoap:fault name="DimensionsBatchFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="moveItemToPart">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="moveItemToPartRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="moveItemToPartResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="unrelateItemsFromParts">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="unrelateItemsFromPartsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="unrelateItemsFromPartsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DimensionsBatchFaultMessage">
+        <wsdlsoap:fault name="DimensionsBatchFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="promoteItems">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="promoteItemsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="promoteItemsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="demoteItems">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="demoteItemsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="demoteItemsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitDeployItems">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="submitDeployItemsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="submitDeployItemsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitRollbackItems">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="submitRollbackItemsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="submitRollbackItemsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createProjectBaseline">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createProjectBaselineRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createProjectBaselineResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createDesignPartBaseline">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createDesignPartBaselineRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createDesignPartBaselineResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createRevisedBaseline">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createRevisedBaselineRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createRevisedBaselineResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deployBaseline">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="deployBaselineRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deployBaselineResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="buildBaseline">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="buildBaselineRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="buildBaselineResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="promoteBaselines">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="promoteBaselinesRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="promoteBaselinesResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="demoteBaselines">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="demoteBaselinesRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="demoteBaselinesResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitDeployBaselines">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="submitDeployBaselinesRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="submitDeployBaselinesResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitRollbackBaselines">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="submitRollbackBaselinesRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="submitRollbackBaselinesResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createRequest">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createRequestRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createRequestResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateRequest">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="updateRequestRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateRequestResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRequests">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getRequestsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getRequestsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="actionRequest">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="actionRequestRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="actionRequestResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deployRequest">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="deployRequestRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deployRequestResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="delegateRequest">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="delegateRequestRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="delegateRequestResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="delegateRequestForReplication">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="delegateRequestForReplicationRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="delegateRequestForReplicationResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="relateRequestToRequests">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="relateRequestToRequestsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="relateRequestToRequestsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DimensionsBatchFaultMessage">
+        <wsdlsoap:fault name="DimensionsBatchFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="unrelateRequestFromRequests">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="unrelateRequestFromRequestsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="unrelateRequestFromRequestsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DimensionsBatchFaultMessage">
+        <wsdlsoap:fault name="DimensionsBatchFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="promoteRequests">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="promoteRequestsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="promoteRequestsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="demoteRequests">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="demoteRequestsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="demoteRequestsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitDeployRequests">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="submitDeployRequestsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="submitDeployRequestsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitRollbackRequests">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="submitRollbackRequestsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="submitRollbackRequestsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRequestDescription">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getRequestDescriptionRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getRequestDescriptionResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateRequestDescription">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="updateRequestDescriptionRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateRequestDescriptionResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createScheduleJob">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createScheduleJobRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createScheduleJobResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listScheduleJobs">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="listScheduleJobsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listScheduleJobsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DimensionsFaultMessage">
+        <wsdlsoap:fault name="DimensionsFaultMessage" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="dmwebservices">
+    <wsdl:port name="dmwebservices" binding="impl:dmwebservicesSoapBinding">
+      <wsdlsoap:address location="https://dimensions.mctp.corp:8443/dmwebservices2/services/dmwebservices/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

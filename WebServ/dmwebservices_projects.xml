@@ -1,0 +1,285 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:basic="http://serena.com/dimensions/basic/1" xmlns:prj="http://serena.com/dimensions/projects/1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://serena.com/dimensions/projects/1">
+<import namespace="http://serena.com/dimensions/basic/1" schemaLocation="dmwebservices_basic.xml"/>
+<simpleType name="ProjectStatus">
+<annotation>
+<documentation>
+				Project Status - The LOCKED state prevents new Dimensions items being added to the project
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Locked"/>
+<enumeration value="Unlocked"/>
+</restriction>
+</simpleType>
+<simpleType name="ProjectRevisionType">
+<annotation>
+<documentation>
+				Type of Project revision
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Branch"/>
+<enumeration value="Trunk"/>
+</restriction>
+</simpleType>
+<complexType name="ProjectBranches">
+<annotation>
+<documentation>
+				List of branches names within Project
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="Branch" type="xsd:string"/>
+</sequence>
+</complexType>
+<simpleType name="ProjectDeploymentModel">
+<annotation>
+<documentation>
+				Project deployment model
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Manual"/>
+<enumeration value="Automatic"/>
+</restriction>
+</simpleType>
+<simpleType name="ProjectDeploymentMethod">
+<annotation>
+<documentation>
+				Project deployment method
+			</documentation>
+</annotation>
+<restriction base="xsd:string">
+<enumeration value="Request"/>
+<enumeration value="Baseline"/>
+</restriction>
+</simpleType>
+<complexType name="ProjectManagers">
+<annotation>
+<documentation>
+				List of project managers
+			</documentation>
+</annotation>
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="Manager" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="NewProject">
+<annotation>
+<documentation>
+				This object represents a Dimensions Project to be created. Use this objects when creating a new Dimensions Project.
+			</documentation>
+</annotation>
+<sequence>
+<element name="projectSpec" type="xsd:string">
+<annotation>
+<documentation>
+						&lt;project-spec&gt;
+						Comprises: &lt;product-id&gt;:&lt;project-id&gt;
+					</documentation>
+</annotation>
+</element>
+<element name="description" type="xsd:string">
+<annotation>
+<documentation>
+						/DESCRIPTION=&lt;description&gt;
+						Specifies the description to be attached to the project definition.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="type" type="xsd:string">
+<annotation>
+<documentation>
+						/TYPE=&lt;type-name&gt;
+						Specifies the type of the project. If this qualifier is not specified, the type name
+						WORKSET is used.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="sourceProjectSpec" type="xsd:string">
+<annotation>
+<documentation>
+						/WORKSET=&lt;project-spec&gt;
+						Optionally specifies the project on which to base the new project.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="sourceBaselineSpec" type="xsd:string">
+<annotation>
+<documentation>
+						/BASELINE=&lt;baseline-spec&gt;
+						Optionally specifies the Dimensions baseline on which to base the new project.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="attributes" type="basic:AttributeArray">
+<annotation>
+<documentation>
+						/ATTRIBUTES=(&lt;attr1&gt;,attr2,:)
+						Specifies the user-defined attribute values for this project.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="status" type="prj:ProjectStatus">
+<annotation>
+<documentation>
+						/STATUS=&lt;status&gt;
+						Allows the new project to be created in either a LOCKED or UNLOCKED (default) state.
+						The LOCKED state prevents new Dimensions items being added to the project
+						(baselining is likely to occur in this state).
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="revisionType" type="prj:ProjectRevisionType">
+<annotation>
+<documentation>
+						/BRANCH
+						Optional qualifier to adopt "branching" for the item revision scheme. This means that
+						if an item-revision is at revision maint#5, and the users decide to stay on this maint
+						branch, then subsequent revisions will be maint#5.1, maint#5.2, maint#5.3 etc.
+						/TRUNK
+						Optional qualifier to adopt "trunking" for the item revision scheme. This means that if
+						an item-revision is at revision maint#5, and the users decide to stay on this maint
+						branch, then subsequent revisions will be maint#6, maint#7, maint#8 etc.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="autoRevision" type="xsd:boolean">
+<annotation>
+<documentation>
+						/AUTO_REV
+						Optional qualifier to tell Dimensions to automatically generate a new revision each
+						time an item-spec is edited/updated.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="Branches" type="prj:ProjectBranches">
+<annotation>
+<documentation>
+						/VALID_BRANCHES=(&lt;branch-id1&gt;,&lt;branch-id2&gt;,:)
+						Identifies one or more branches - each previously defined in a Define (Item) Version
+						Branches (DVB) command - that are to be valid for new item revisions created in this
+						new project. If this parameter is omitted, an empty list is created - the Set Project
+						Attributes (SWS) command can subsequently be used, if desired, to associate a valid
+						list of branch-ids to the project created here.
+						This list defines the branches on which newly created item revisions can be placed.
+						If the project is defined with one or more valid branches, every new item revision in
+						the new project must use one of these branch-ids.
+						If the project is defined with no valid branches, new revisions with no branch-ids in
+						them can continue to be used
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="defaultBranch" type="xsd:string">
+<annotation>
+<documentation>
+						/DEFAULT_BRANCH=&lt;branch-id&gt;
+						Selects, from the valid list of branch-ids, the &lt;branch-id&gt; to be the default branch. If
+						a default branch-id is not defined, the first branch-id in the valid-list of branch-ids is
+						taken as the default.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="deploymentModel" type="prj:ProjectDeploymentModel">
+<annotation>
+<documentation>
+						/DEPLOYMENT_MODEL=MANUAL or /DEPLOYMENT_MODEL=AUTOMATIC
+						Specifies whether the project uses a manual or automatic deployment model.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="deploymentMethod" type="prj:ProjectDeploymentMethod">
+<annotation>
+<documentation>
+						/DEPLOYMENT_METHOD=REQUEST or /DEPLOYMENT_METHOD=BASELINE
+						Specifies the deployment method for creating the project.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="pathControl" type="xsd:boolean">
+<annotation>
+<documentation>
+						/[NO]PATH_CONTROL
+						Specifies whether a request is required to perform refactoring operations in this
+						project.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="copyOnDeploy" type="xsd:boolean">
+<annotation>
+<documentation>
+						/COPY_ON_DEPLOY
+						Optional qualifier that specifies whether files that are deployed from an earlier stage
+						to a newer stage will be copied between areas rather than moved (they are moved by default).
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="keepStage" type="xsd:boolean">
+<annotation>
+<documentation>
+						/KEEP_STAGE
+						When creating a project based on another project, specify this optional qualifier to
+						avoid resetting the stage of item revisions in the new project to the initial stage and to
+						instead keep the stage of the item revisions from the source project. The default
+						behavior (when this qualifier is not specified) is to reset the stage of all items in the
+						new project to the initial stage. Note that this qualifier can only be used when the new
+						project uses the manual deployment model.
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="ProjectDetails">
+<annotation>
+<documentation>
+				This object represents a Dimensions Project details.
+			</documentation>
+</annotation>
+<sequence>
+<element name="spec" type="xsd:string">
+<annotation>
+<documentation>
+						&lt;project-spec&gt;
+						Comprises: &lt;product-id&gt;:&lt;project-id&gt;
+					</documentation>
+</annotation>
+</element>
+<element name="status" type="xsd:string">
+<annotation>
+<documentation>
+						Specifies the project status.
+					</documentation>
+</annotation>
+</element>
+<element name="owner" type="xsd:string">
+<annotation>
+<documentation>
+						Specifies the project owner.
+					</documentation>
+</annotation>
+</element>
+<element name="type" type="xsd:string">
+<annotation>
+<documentation>
+						Specifies if it is project of stream.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="managers" type="prj:ProjectManagers">
+<annotation>
+<documentation>
+						Optionally specifies the list of project managers.
+					</documentation>
+</annotation>
+</element>
+<element minOccurs="0" name="parentProjectSpec" type="xsd:string">
+<annotation>
+<documentation>
+						Optionally specifies the parent project.
+						Comprises: &lt;product-id&gt;:&lt;project-id&gt;
+					</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+</schema>

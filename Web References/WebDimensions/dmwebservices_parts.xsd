@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:basic="http://serena.com/dimensions/basic/1" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:parts="http://serena.com/dimensions/parts/1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://serena.com/dimensions/parts/1" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="dmwebservices_basic.xml" namespace="http://serena.com/dimensions/basic/1" />
+  <xsd:complexType name="NewDesignPart">
+    <xsd:annotation>
+      <xsd:documentation>
+				This object represents a Dimensions Design Part to be created. Use this objects when creating a new Dimensions Design Part.
+			</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="partSpec" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+						&lt;part-spec&gt; comprises: &lt;product-id&gt;:&lt;part-id&gt;.&lt;variant&gt;;&lt;pcs&gt;
+						&lt;variant&gt; if omitted, the default (specified when the product was defined) is used.
+						&lt;pcs&gt; if omitted, the PCS for new variants (specified when the product was defined) is used.
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="category" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+						/CATEGORY=&lt;category-name&gt;
+						Specifies the category of design part.
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="parentPartSpec" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+						/PARENT_PART=&lt;parent-part-spec&gt; comprises: &lt;product-id&gt;:&lt;part-id&gt;.&lt;variant&gt;;&lt;pcs&gt;
+						&lt;variant&gt; may be omitted if only one exists.
+						&lt;pcs&gt; is ignored; the current PCS is always used.
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="description" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+						/DESCRIPTION=&lt;description&gt;
+						This is mandatory text to describe the function of the design part.
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="attributes" type="basic:AttributeArray">
+        <xsd:annotation>
+          <xsd:documentation>
+						/ATTRIBUTES=(&lt;attr1&gt;=&lt;value1&gt;,&lt;attr2&gt;=&lt;value2&gt;,..)
+						&lt;attr1&gt; is the Variable Name defined for one of the user-defined attributes for
+						design parts, which has also been declared as usable for this &lt;product-id&gt; and
+						&lt;category-name&gt;.&lt;valueN&gt; is the substitution value to be given to this attribute.
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

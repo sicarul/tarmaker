@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/Sicarul/Dropbox/Dev/TarMaker/TarMaker/WebServ/dmwebservices_basic.xml" filename="dmwebservices_basic.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/Sicarul/Dropbox/Dev/TarMaker/TarMaker/WebServ/dmwebservices_parts.xml" filename="dmwebservices_parts.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///C:/Users/Sicarul/Dropbox/Dev/TarMaker/TarMaker/WebServ/dmwebservices.xml" filename="dmwebservices.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/Sicarul/Dropbox/Dev/TarMaker/TarMaker/WebServ/dmwebservices_requests.xml" filename="dmwebservices_requests.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/Sicarul/Dropbox/Dev/TarMaker/TarMaker/WebServ/dmwebservices_projects.xml" filename="dmwebservices_projects.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>
